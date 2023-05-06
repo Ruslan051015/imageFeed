@@ -47,7 +47,7 @@
                                                     <state key="normal" title="" image="Like pressed"/>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 мая 2023" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22H-fE-FBu" userLabel="Date Label">
-                                                    <rect key="frame" x="24" y="344" width="170" height="17"/>
+                                                    <rect key="frame" x="24" y="345.33333333333331" width="170" height="15.666666666666686"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" name="YP White (iOS)"/>
                                                     <nil key="highlightedColor"/>
@@ -58,7 +58,6 @@
                                                 <constraint firstItem="2jo-NN-12r" firstAttribute="leading" secondItem="LoZ-3L-B1M" secondAttribute="leading" constant="16" id="JBe-Ag-3qu"/>
                                                 <constraint firstItem="22H-fE-FBu" firstAttribute="trailing" secondItem="2jo-NN-12r" secondAttribute="trailing" constant="-183" id="LFu-QG-WDU"/>
                                                 <constraint firstItem="dEx-Ux-rSd" firstAttribute="trailing" secondItem="2jo-NN-12r" secondAttribute="trailing" id="M7A-nI-jKN"/>
-                                                <constraint firstItem="22H-fE-FBu" firstAttribute="top" secondItem="2jo-NN-12r" secondAttribute="top" constant="340" id="SVx-ch-Paa"/>
                                                 <constraint firstItem="22H-fE-FBu" firstAttribute="leading" secondItem="2jo-NN-12r" secondAttribute="leading" constant="8" id="Zvo-aO-4e2"/>
                                                 <constraint firstItem="2jo-NN-12r" firstAttribute="bottom" secondItem="LoZ-3L-B1M" secondAttribute="bottom" constant="-4" id="ksZ-v8-4yW"/>
                                                 <constraint firstItem="2jo-NN-12r" firstAttribute="trailing" secondItem="LoZ-3L-B1M" secondAttribute="trailing" constant="-16" id="lxJ-Rn-kfF"/>
