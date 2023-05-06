@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A7F7D3D2A02AF18004F4DB9 /* TableView + extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F7D3C2A02AF18004F4DB9 /* TableView + extensions.swift */; };
 		4A912F9B2A0462FF00CFBFF5 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A912F9A2A0462FF00CFBFF5 /* ImagesListCell.swift */; };
 		4AF1595329FE879F001032C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF1595229FE879F001032C0 /* AppDelegate.swift */; };
 		4AF1595529FE879F001032C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF1595429FE879F001032C0 /* SceneDelegate.swift */; };
@@ -18,7 +17,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4A7F7D3C2A02AF18004F4DB9 /* TableView + extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView + extensions.swift"; sourceTree = "<group>"; };
 		4A912F9A2A0462FF00CFBFF5 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		4AF1594F29FE879F001032C0 /* imageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AF1595229FE879F001032C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,7 +42,6 @@
 		4A7F7D3B2A02AEA4004F4DB9 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				4A7F7D3C2A02AF18004F4DB9 /* TableView + extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -169,7 +166,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AF1595729FE879F001032C0 /* ImagesListViewController.swift in Sources */,
-				4A7F7D3D2A02AF18004F4DB9 /* TableView + extensions.swift in Sources */,
 				4A912F9B2A0462FF00CFBFF5 /* ImagesListCell.swift in Sources */,
 				4AF1595329FE879F001032C0 /* AppDelegate.swift in Sources */,
 				4AF1595529FE879F001032C0 /* SceneDelegate.swift in Sources */,
