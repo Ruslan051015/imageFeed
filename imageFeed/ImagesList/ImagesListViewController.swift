@@ -11,7 +11,6 @@ class ImagesListViewController: UIViewController {
     //MARK: - Lifecycle:
     override func viewDidLoad() {
         super.viewDidLoad()
-       
     }
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
