@@ -20,6 +20,64 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zPu-nU-gyC">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" name="YP Black (iOS)"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="373" id="skt-dS-CrT" customClass="ImagesListCell" customModule="imageFeed" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="373"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="skt-dS-CrT" id="LoZ-3L-B1M">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="373"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="2jo-NN-12r" userLabel="Cell Image">
+                                                    <rect key="frame" x="16" y="0.0" width="361" height="373"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="16"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dEx-Ux-rSd" userLabel="Like Button">
+                                                    <rect key="frame" x="333" y="0.0" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="44" id="EUg-O1-2Mb"/>
+                                                        <constraint firstAttribute="height" constant="44" id="XHb-Md-jL6"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" title="" image="Like pressed"/>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 мая 2023" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22H-fE-FBu" userLabel="Date Label">
+                                                    <rect key="frame" x="24" y="344" width="170" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" name="YP White (iOS)"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="dEx-Ux-rSd" firstAttribute="top" secondItem="2jo-NN-12r" secondAttribute="top" id="9j3-GN-EIC"/>
+                                                <constraint firstItem="2jo-NN-12r" firstAttribute="leading" secondItem="LoZ-3L-B1M" secondAttribute="leading" constant="16" id="JBe-Ag-3qu"/>
+                                                <constraint firstItem="22H-fE-FBu" firstAttribute="trailing" secondItem="2jo-NN-12r" secondAttribute="trailing" constant="-183" id="LFu-QG-WDU"/>
+                                                <constraint firstItem="dEx-Ux-rSd" firstAttribute="trailing" secondItem="2jo-NN-12r" secondAttribute="trailing" id="M7A-nI-jKN"/>
+                                                <constraint firstItem="22H-fE-FBu" firstAttribute="top" secondItem="LoZ-3L-B1M" secondAttribute="top" constant="344" id="SVx-ch-Paa"/>
+                                                <constraint firstItem="22H-fE-FBu" firstAttribute="leading" secondItem="2jo-NN-12r" secondAttribute="leading" constant="8" id="Zvo-aO-4e2"/>
+                                                <constraint firstItem="2jo-NN-12r" firstAttribute="bottom" secondItem="LoZ-3L-B1M" secondAttribute="bottom" id="ksZ-v8-4yW"/>
+                                                <constraint firstItem="2jo-NN-12r" firstAttribute="trailing" secondItem="LoZ-3L-B1M" secondAttribute="trailing" constant="-16" id="lxJ-Rn-kfF"/>
+                                                <constraint firstItem="22H-fE-FBu" firstAttribute="bottom" secondItem="LoZ-3L-B1M" secondAttribute="bottom" constant="-8" id="u4r-S6-eQP"/>
+                                                <constraint firstItem="2jo-NN-12r" firstAttribute="top" secondItem="LoZ-3L-B1M" secondAttribute="top" id="x76-WF-WDT"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" name="YP Background (iOS)"/>
+                                        <connections>
+                                            <outlet property="cellImage" destination="2jo-NN-12r" id="DO6-WY-4PU"/>
+                                            <outlet property="dateLabel" destination="22H-fE-FBu" id="CE8-y4-AMY"/>
+                                            <outlet property="likeButton" destination="dEx-Ux-rSd" id="Ozg-e7-ZaE"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="QCh-Fv-mtt"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="RWJ-Fb-8JJ"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -41,8 +99,16 @@
         </scene>
     </scenes>
     <resources>
+        <image name="0" width="200" height="132"/>
+        <image name="Like pressed" width="30" height="28"/>
+        <namedColor name="YP Background (iOS)">
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="YP Black (iOS)">
-            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP White (iOS)">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
