@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A1EFAA92A0D33C7004CEF67 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1EFAA82A0D33C7004CEF67 /* ProfileViewController.swift */; };
 		4A912F9B2A0462FF00CFBFF5 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A912F9A2A0462FF00CFBFF5 /* ImagesListCell.swift */; };
 		4AF1595329FE879F001032C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF1595229FE879F001032C0 /* AppDelegate.swift */; };
 		4AF1595529FE879F001032C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF1595429FE879F001032C0 /* SceneDelegate.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A1EFAA82A0D33C7004CEF67 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4A912F9A2A0462FF00CFBFF5 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		4AF1594F29FE879F001032C0 /* imageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AF1595229FE879F001032C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -39,6 +41,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A1EFAA72A0D339E004CEF67 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				4A1EFAA82A0D33C7004CEF67 /* ProfileViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		4A7F7D3B2A02AEA4004F4DB9 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +68,7 @@
 		4AF1594629FE879F001032C0 = {
 			isa = PBXGroup;
 			children = (
+				4A1EFAA72A0D339E004CEF67 /* Profile */,
 				4AF1595129FE879F001032C0 /* imageFeed */,
 				4AF1595029FE879F001032C0 /* Products */,
 			);
@@ -167,6 +178,7 @@
 			files = (
 				4AF1595729FE879F001032C0 /* ImagesListViewController.swift in Sources */,
 				4A912F9B2A0462FF00CFBFF5 /* ImagesListCell.swift in Sources */,
+				4A1EFAA92A0D33C7004CEF67 /* ProfileViewController.swift in Sources */,
 				4AF1595329FE879F001032C0 /* AppDelegate.swift in Sources */,
 				4AF1595529FE879F001032C0 /* SceneDelegate.swift in Sources */,
 			);

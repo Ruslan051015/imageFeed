@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "ipad.and.arrow.forwardexit logo.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "ipad.and.arrow.forwardexit logo 1.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "ipad.and.arrow.forwardexit logo 2.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
