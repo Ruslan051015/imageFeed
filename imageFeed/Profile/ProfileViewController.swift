@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
   //MARK: - Properties:
     override  var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
