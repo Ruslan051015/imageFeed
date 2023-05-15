@@ -11,6 +11,12 @@ final class SingleImageViewController: UIViewController {
     }
     //MARK: - Outlets:
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var backwardButton: UIButton!
+    //MARK: - Actions:
+    @IBAction func didTapBackButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     //MARK: - Lifecycle:
     override func viewDidLoad() {
         super.viewDidLoad()
