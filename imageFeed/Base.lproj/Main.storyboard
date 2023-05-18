@@ -65,7 +65,7 @@
                                                         <constraint firstAttribute="height" constant="44" id="XHb-Md-jL6"/>
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" title="" image="Like pressed"/>
+                                                    <state key="normal" title="" image="like_pressed"/>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 мая 2023" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22H-fE-FBu" userLabel="Date Label">
                                                     <rect key="frame" x="24" y="345.33333333333331" width="170" height="15.666666666666686"/>
@@ -128,10 +128,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="hhc-Lc-lmW">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RjB-6V-0yo">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </imageView>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="393" placeholderIntrinsicHeight="400" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="hhc-Lc-lmW">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="400"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="hhc-Lc-lmW" firstAttribute="trailing" secondItem="RjB-6V-0yo" secondAttribute="trailing" id="EUp-i0-Igt"/>
+                                    <constraint firstItem="hhc-Lc-lmW" firstAttribute="leading" secondItem="RjB-6V-0yo" secondAttribute="leading" id="S9p-5Z-evB"/>
+                                    <constraint firstItem="hhc-Lc-lmW" firstAttribute="top" secondItem="RjB-6V-0yo" secondAttribute="top" id="VVc-GJ-zec"/>
+                                    <constraint firstItem="hhc-Lc-lmW" firstAttribute="bottom" secondItem="RjB-6V-0yo" secondAttribute="bottom" id="oDC-Vh-TrY"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="wny-8U-kgA"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="NrF-Fb-sGr"/>
+                            </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GQR-LE-JLO" userLabel="Backward Button">
                                 <rect key="frame" x="31" y="56" width="24" height="24"/>
                                 <constraints>
@@ -144,27 +157,39 @@
                                     <action selector="didTapBackButton:" destination="OIN-BY-fDe" eventType="touchUpInside" id="u6g-WP-rb5"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LlA-8e-XQE" userLabel="Share Button">
+                                <rect key="frame" x="171.66666666666666" y="751" width="50" height="50"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="shareButton"/>
+                                <connections>
+                                    <action selector="didTapShareButton:" destination="OIN-BY-fDe" eventType="touchUpInside" id="uqX-2d-A2D"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="1br-pN-m6h"/>
                         <color key="backgroundColor" name="YP Black (iOS)"/>
                         <constraints>
                             <constraint firstItem="GQR-LE-JLO" firstAttribute="top" secondItem="SMy-6n-F1x" secondAttribute="top" constant="56" id="5d1-2t-zAg"/>
-                            <constraint firstItem="hhc-Lc-lmW" firstAttribute="top" secondItem="SMy-6n-F1x" secondAttribute="top" id="E4A-br-VyZ"/>
-                            <constraint firstItem="hhc-Lc-lmW" firstAttribute="bottom" secondItem="SMy-6n-F1x" secondAttribute="bottom" id="Mmr-aL-AFK"/>
+                            <constraint firstItem="LlA-8e-XQE" firstAttribute="centerX" secondItem="SMy-6n-F1x" secondAttribute="centerX" id="8xn-b7-VvZ"/>
+                            <constraint firstItem="RjB-6V-0yo" firstAttribute="bottom" secondItem="SMy-6n-F1x" secondAttribute="bottom" id="OFZ-I8-RtM"/>
                             <constraint firstItem="GQR-LE-JLO" firstAttribute="leading" secondItem="SMy-6n-F1x" secondAttribute="leading" constant="31" id="b9L-9v-vY9"/>
-                            <constraint firstItem="hhc-Lc-lmW" firstAttribute="leading" secondItem="SMy-6n-F1x" secondAttribute="leading" id="hh3-Id-2N1"/>
-                            <constraint firstItem="hhc-Lc-lmW" firstAttribute="trailing" secondItem="SMy-6n-F1x" secondAttribute="trailing" id="qH6-Va-VBS"/>
+                            <constraint firstItem="RjB-6V-0yo" firstAttribute="trailing" secondItem="SMy-6n-F1x" secondAttribute="trailing" id="hrt-Un-8hp"/>
+                            <constraint firstItem="RjB-6V-0yo" firstAttribute="top" secondItem="SMy-6n-F1x" secondAttribute="top" id="iJ5-4M-mEI"/>
+                            <constraint firstItem="RjB-6V-0yo" firstAttribute="leading" secondItem="SMy-6n-F1x" secondAttribute="leading" id="nko-Fv-Qwp"/>
+                            <constraint firstItem="1br-pN-m6h" firstAttribute="bottom" secondItem="LlA-8e-XQE" secondAttribute="bottom" constant="51" id="sYW-gR-gWc"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Y8n-aZ-31D"/>
                     <connections>
                         <outlet property="backwardButton" destination="GQR-LE-JLO" id="WCT-2w-Glr"/>
                         <outlet property="imageView" destination="hhc-Lc-lmW" id="Si4-0k-ueY"/>
+                        <outlet property="scrollView" destination="RjB-6V-0yo" id="XaQ-pu-xXy"/>
+                        <outlet property="shareButton" destination="LlA-8e-XQE" id="QUs-8K-rpq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vqI-Cu-DoY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="196" y="-416"/>
+            <point key="canvasLocation" x="194.6564885496183" y="-416.19718309859155"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="AUU-qP-TnO">
@@ -206,7 +231,7 @@
                                     <constraint firstAttribute="width" constant="20" id="dQu-ME-mrW"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="LogOut logo"/>
+                                <state key="normal" image="logOut_logo"/>
                                 <connections>
                                     <action selector="logOutAction:" destination="1iD-FD-oV1" eventType="touchUpInside" id="51j-rn-JLH"/>
                                 </connections>
@@ -246,10 +271,11 @@
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
-        <image name="Like pressed" width="30" height="28"/>
-        <image name="LogOut logo" width="20" height="22"/>
         <image name="backwardButton" width="24" height="24"/>
+        <image name="like_pressed" width="30" height="28"/>
+        <image name="logOut_logo" width="20" height="22"/>
         <image name="myPhoto" width="1150" height="1150"/>
+        <image name="shareButton" width="50" height="50"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
         <namedColor name="YP Background (iOS)">

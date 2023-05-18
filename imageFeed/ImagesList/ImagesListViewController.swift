@@ -40,9 +40,9 @@ extension ImagesListViewController {
         cell.dateLabel.text = dateFormatter.string(from: Date())
         
         if indexPath.row % 2 == 0 {
-            cell.likeButton.imageView?.image = UIImage(named: "Like pressed")
+            cell.likeButton.imageView?.image = UIImage(named: "like_pressed")
         } else {
-            cell.likeButton.imageView?.image = UIImage(named: "Like not pressed")
+            cell.likeButton.imageView?.image = UIImage(named: "like_not_pressed")
         }
     }
 }
