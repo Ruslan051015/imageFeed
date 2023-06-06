@@ -2,11 +2,47 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     //MARK: - Properties:
-    private var profileImage: UIImageView?
-    private var logOutButton: UIButton?
-    private var profileNameLabel: UILabel?
-    private var logInLabel: UILabel?
-    private var statusLabel: UILabel?
+    private lazy var profileImage: UIImageView = {
+        var profileImage = #imageLiteral(resourceName: "myPhoto")
+        let imageView = UIImageView(image: profileImage)
+        
+        return imageView
+    }()
+    private lazy var logOutButton: UIButton = {
+        let logOutImage = UIImage(named: "logOut_logo")
+        let button = UIButton.systemButton(with: logOutImage!, target: self, action: #selector(didTapLogOutButton))
+        //        let button = UIButton(type: .system)
+        //        button.addTarget(self, action: #selector(didTapLogOutButton), for: .touchUpInside)
+        button.imageView?.image = logOutImage
+        button.tintColor = .ypRed
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    private lazy var profileNameLabel: UILabel = {
+        let nameLabel = UILabel()
+        nameLabel.text = "Руслан Халилулин"
+        nameLabel.textColor = .ypWhite
+        nameLabel.font = .systemFont(ofSize: 23, weight: .bold)
+        
+        return nameLabel
+    }()
+    private lazy var logInLabel: UILabel = {
+        let label = UILabel()
+        label.text = "@rusgunner"
+        label.textColor = .ypGray
+        label.font = .systemFont(ofSize: 13)
+        
+        return label
+    }()
+    private lazy var statusLabel: UILabel = {
+        let status = UILabel()
+        status.text = "Hello, World!"
+        status.textColor = .ypWhite
+        status.font = .systemFont(ofSize: 13)
+        
+        return status
+    }()
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -26,62 +62,36 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
         
-        let profileImage = #imageLiteral(resourceName: "myPhoto")
-        let imageView = UIImageView(image: profileImage)
-        turnOfAutoresizing(imageView)
-        addToView(imageView)
-        self.profileImage = imageView
+        turnOfAutoresizing(profileImage)
+        addToView(profileImage)
         
-        guard let logOutImage = UIImage(named: "logOut_logo") else { return }
-        let logOutButton = UIButton.systemButton(
-            with: logOutImage,
-            target: self,
-            action: #selector(Self.didTapLogOutButton)
-        )
-        logOutButton.tintColor = .ypRed
         turnOfAutoresizing(logOutButton)
         addToView(logOutButton)
-        self.logOutButton = logOutButton
         
-        let profileNameLabel = UILabel()
-        profileNameLabel.text = "Руслан Халилулин"
-        profileNameLabel.textColor = .ypWhite
-        profileNameLabel.font = .systemFont(ofSize: 23, weight: .bold)
         turnOfAutoresizing(profileNameLabel)
         addToView(profileNameLabel)
-        self.profileNameLabel = profileNameLabel
         
-        let logInLabel = UILabel()
-        logInLabel.text = "@rusgunner"
-        logInLabel.textColor = .ypGray
-        logInLabel.font = .systemFont(ofSize: 13)
         turnOfAutoresizing(logInLabel)
         addToView(logInLabel)
-        self.logInLabel = logInLabel
         
-        let statusLabel = UILabel()
-        statusLabel.text = "Hello, World!"
-        statusLabel.textColor = .ypWhite
-        statusLabel.font = .systemFont(ofSize: 13)
         turnOfAutoresizing(statusLabel)
         addToView(statusLabel)
-        self.statusLabel = statusLabel
         
         NSLayoutConstraint.activate([
-            imageView.heightAnchor.constraint(equalToConstant: 70),
-            imageView.widthAnchor.constraint(equalToConstant: 70),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
+            profileImage.heightAnchor.constraint(equalToConstant: 70),
+            profileImage.widthAnchor.constraint(equalToConstant: 70),
+            profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            profileImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
             
             logOutButton.heightAnchor.constraint(equalToConstant: 44),
             logOutButton.widthAnchor.constraint(equalToConstant: 44),
-            logOutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            logOutButton.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
             logOutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            profileNameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            profileNameLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor),
             profileNameLabel.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -16),
-            profileNameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-           
+            profileNameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
+            
             logInLabel.leadingAnchor.constraint(equalTo: profileNameLabel.leadingAnchor),
             logInLabel.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -16),
             logInLabel.heightAnchor.constraint(equalToConstant: 18),
