@@ -265,27 +265,35 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VPf-cb-Y0o">
-                                <rect key="frame" x="16" y="13" width="9" height="22"/>
+                                <rect key="frame" x="8" y="11" width="24" height="24"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="backwardBlack"/>
+                                <state key="normal" image="nav_back_button"/>
                                 <connections>
                                     <action selector="didTapBackButton:" destination="zbo-OC-6jc" eventType="touchUpInside" id="k06-te-zXD"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="sg3-Tb-f5H">
+                                <rect key="frame" x="0.0" y="35" width="393" height="4"/>
+                                <color key="progressTintColor" name="YP Black (iOS)"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="VkI-ow-giq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="VPf-cb-Y0o" firstAttribute="top" secondItem="VkI-ow-giq" secondAttribute="top" constant="13" id="78a-va-thO"/>
+                            <constraint firstItem="sg3-Tb-f5H" firstAttribute="leading" secondItem="LS2-jK-EYd" secondAttribute="leading" id="8tM-Dg-gsF"/>
+                            <constraint firstItem="sg3-Tb-f5H" firstAttribute="trailing" secondItem="LS2-jK-EYd" secondAttribute="trailing" id="Ayw-eN-bQp"/>
                             <constraint firstItem="BFw-Cf-P1X" firstAttribute="top" secondItem="LS2-jK-EYd" secondAttribute="top" id="MBN-St-Ab3"/>
+                            <constraint firstItem="VPf-cb-Y0o" firstAttribute="top" secondItem="VkI-ow-giq" secondAttribute="top" constant="11" id="UAU-sD-Y0f"/>
+                            <constraint firstItem="sg3-Tb-f5H" firstAttribute="top" secondItem="VPf-cb-Y0o" secondAttribute="bottom" id="gUN-bU-tQl"/>
+                            <constraint firstItem="VPf-cb-Y0o" firstAttribute="leading" secondItem="VkI-ow-giq" secondAttribute="leading" constant="8" id="h7c-vN-IV3"/>
                             <constraint firstItem="BFw-Cf-P1X" firstAttribute="bottom" secondItem="LS2-jK-EYd" secondAttribute="bottom" id="idi-QU-OXH"/>
-                            <constraint firstItem="VPf-cb-Y0o" firstAttribute="leading" secondItem="VkI-ow-giq" secondAttribute="leading" constant="16" id="sUv-bd-M59"/>
                             <constraint firstItem="BFw-Cf-P1X" firstAttribute="leading" secondItem="LS2-jK-EYd" secondAttribute="leading" id="sfR-Fc-aeU"/>
                             <constraint firstItem="BFw-Cf-P1X" firstAttribute="trailing" secondItem="LS2-jK-EYd" secondAttribute="trailing" id="xh2-Dx-wXr"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="au1-Je-ZcG"/>
                     <connections>
+                        <outlet property="progressView" destination="sg3-Tb-f5H" id="bkG-iv-ULK"/>
                         <outlet property="webView" destination="BFw-Cf-P1X" id="T9g-dV-2jC"/>
                     </connections>
                 </viewController>
@@ -296,9 +304,9 @@
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
-        <image name="backwardBlack" width="9" height="16"/>
         <image name="backwardButton" width="24" height="24"/>
         <image name="like_pressed" width="30" height="28"/>
+        <image name="nav_back_button" width="24" height="24"/>
         <image name="shareButton" width="50" height="50"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>

@@ -3,20 +3,17 @@ import UIKit
 import WebKit
 
 final class AuthViewController: UIViewController {
-//     MARK: - Properties
+    // MARK: - Properties
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
-        
     }
     private let segueIdentifier = "ShowWebView"
-    
     private lazy var authImage: UIImageView = {
         var authImage = #imageLiteral(resourceName: "authLogo")
         let image = UIImageView(image: authImage)
         image.bounds.size = CGSize(width: 60, height: 60)
         return image
     }()
-    
     private lazy var button: UIButton = {
         let logInButton = UIButton(type: .system)
         logInButton.backgroundColor = .ypWhite
@@ -25,11 +22,10 @@ final class AuthViewController: UIViewController {
         logInButton.titleLabel?.font = .boldSystemFont(ofSize: 17)
         logInButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         logInButton.layer.cornerRadius = 16
-        logInButton.layer.masksToBounds = true 
-    
+        logInButton.layer.masksToBounds = true
         return logInButton
     }()
-//    MARK: - Methods:
+    // MARK: - Methods:
     private func addToView(_ view: UIView) {
         self.view.addSubview(view)
     }
@@ -42,23 +38,19 @@ final class AuthViewController: UIViewController {
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdentifier {
-            guard
-                let webViewViewController = segue.destination as? WebViewViewController
+            guard let webViewViewController = segue.destination as? WebViewViewController
             else { fatalError ("Failed to prepare for \(segueIdentifier)") }
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
-//     MARK: - LifeCycle:
+    // MARK: - LifeCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .ypBlack
-        
         turnOfAutoresizing(authImage)
         addToView(authImage)
-        
         turnOfAutoresizing(button)
         addToView(button)
         

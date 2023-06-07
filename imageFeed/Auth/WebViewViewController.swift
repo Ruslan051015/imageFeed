@@ -8,6 +8,7 @@ final class WebViewViewController: UIViewController {
     weak var delegate: WebViewViewControllerDelegate?
     // MARK: - Outlets:
     @IBOutlet weak var webView: WKWebView!
+    @IBOutlet weak var progressView: UIProgressView!
     // MARK: - Actions:
     @IBAction func didTapBackButton(_ sender: Any) {
     }
