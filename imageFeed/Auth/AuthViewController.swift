@@ -8,6 +8,7 @@ final class AuthViewController: UIViewController {
         return .lightContent
     }
     private let segueIdentifier = "ShowWebView"
+    weak var delegate: AuthViewControllerDelegate?
     private lazy var authImage: UIImageView = {
         var authImage = #imageLiteral(resourceName: "authLogo")
         let image = UIImageView(image: authImage)

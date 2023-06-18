@@ -11,6 +11,7 @@ final class WebViewViewController: UIViewController {
     @IBOutlet weak var progressView: UIProgressView!
     // MARK: - Actions:
     @IBAction func didTapBackButton(_ sender: Any) {
+        delegate?.webViewControllerDidCancel(self)
     }
     // MARK: - LifeCycle:
     override func viewWillAppear(_ animated: Bool) {
@@ -27,10 +28,10 @@ final class WebViewViewController: UIViewController {
         
         var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
         urlComponents.queryItems = [
-            URLQueryItem(name: "clien_id", value: AccessKey),
+            URLQueryItem(name: "client_id", value: AccessKey),
             URLQueryItem(name: "redirect_uri", value: RedirectURI),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: AccesScope)
+            URLQueryItem(name: "scope", value: AccessScope)
         ]
         let url = urlComponents.url!
         let request = URLRequest(url: url)
