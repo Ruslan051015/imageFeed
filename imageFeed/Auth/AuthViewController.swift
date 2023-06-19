@@ -39,7 +39,8 @@ final class AuthViewController: UIViewController {
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdentifier {
-            guard let webViewViewController = segue.destination as? WebViewViewController
+            guard
+                let webViewViewController = segue.destination as? WebViewViewController
             else { fatalError ("Failed to prepare for \(segueIdentifier)") }
             webViewViewController.delegate = self
         } else {
