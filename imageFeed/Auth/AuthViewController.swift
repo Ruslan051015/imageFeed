@@ -2,11 +2,17 @@ import Foundation
 import UIKit
 import WebKit
 
+protocol WebViewViewControllerDelegate: AnyObject {
+    func webViewControllerDelegate(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
+    func webViewControllerDidCancel(_ vc: WebViewViewController)
+}
+
 final class AuthViewController: UIViewController {
     // MARK: - Properties
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
     private let segueIdentifier = "ShowWebView"
     weak var delegate: AuthViewControllerDelegate?
     private lazy var authImage: UIImageView = {
@@ -15,28 +21,32 @@ final class AuthViewController: UIViewController {
         image.bounds.size = CGSize(width: 60, height: 60)
         return image
     }()
-    private lazy var button: UIButton = {
-        let logInButton = UIButton(type: .system)
-        logInButton.backgroundColor = .ypWhite
-        logInButton.setTitle("Войти", for: .normal)
-        logInButton.setTitleColor(.ypBlack, for: .normal)
-        logInButton.titleLabel?.font = .boldSystemFont(ofSize: 17)
-        logInButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        logInButton.layer.cornerRadius = 16
-        logInButton.layer.masksToBounds = true
-        return logInButton
+    
+    private lazy var logInButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .ypWhite
+        button.setTitle("Войти", for: .normal)
+        button.setTitleColor(.ypBlack, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 17)
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
+        return button
     }()
     // MARK: - Methods:
     private func addToView(_ view: UIView) {
         self.view.addSubview(view)
     }
+    
     private func turnOfAutoresizing(_ view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
     }
+    
     @objc
     private func buttonTapped() {
         performSegue(withIdentifier: segueIdentifier, sender: self)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdentifier {
             guard
@@ -53,18 +63,26 @@ final class AuthViewController: UIViewController {
         view.backgroundColor = .ypBlack
         turnOfAutoresizing(authImage)
         addToView(authImage)
-        turnOfAutoresizing(button)
-        addToView(button)
+        turnOfAutoresizing(logInButton)
+        addToView(logInButton)
         
         NSLayoutConstraint.activate([
             authImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             authImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -124),
-            button.heightAnchor.constraint(equalToConstant: 48),
-            button.widthAnchor.constraint(equalToConstant: 343)
+            logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            logInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            logInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -124),
+            logInButton.heightAnchor.constraint(equalToConstant: 48),
+            logInButton.widthAnchor.constraint(equalToConstant: 343)
         ])
+    }
+}
+
+extension AuthViewController: WebViewViewControllerDelegate {
+    func webViewControllerDelegate(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
+        delegate?.authViewController(self, didAuthenticateWithCode: code)
+    }
+    func webViewControllerDidCancel(_ vc: WebViewViewController) {
+        dismiss(animated: true)
     }
 }

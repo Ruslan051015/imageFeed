@@ -8,8 +8,10 @@ final class OAuth2Service {
             return OAuth2TokenStorage().token
         }
         set {
-            OAuth2TokenStorage().token = newValue 
-        } }
+            OAuth2TokenStorage().token = newValue
+        }
+    }
+    
     func fetchOAuthToken(
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void ){
@@ -26,11 +28,11 @@ final class OAuth2Service {
                 }
             }
             task.resume()
-            
         }
 }
-extension OAuth2Service {
-    private func object(
+
+private extension OAuth2Service {
+    func object(
         for request: URLRequest,
         completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
     ) -> URLSessionTask {
@@ -42,7 +44,8 @@ extension OAuth2Service {
             completion(response)
         }
     }
-    private func authTokenRequest(code: String) -> URLRequest {
+    
+    func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
             + "?client_id=\(AccessKey)"
@@ -53,7 +56,8 @@ extension OAuth2Service {
             httpMethod: "POST",
             baseURL: URL(string: "https://unsplash.com")!
         ) }
-    private struct OAuthTokenResponseBody: Decodable {
+    
+    struct OAuthTokenResponseBody: Decodable {
         let accessToken: String
         let tokenType: String
         let scope: String
@@ -65,7 +69,8 @@ extension OAuth2Service {
             case scope
             case createdAt = "created_at"
         }
-    } }
+    }
+}
 // MARK: - HTTP Request
 extension URLRequest {
     static func makeHTTPRequest(
@@ -76,13 +81,15 @@ extension URLRequest {
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod
         return request
-    } }
+    }
+}
 // MARK: - Network Connection
 enum NetworkError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
 }
+
 extension URLSession {
     func data(
         for request: URLRequest,
@@ -93,6 +100,7 @@ extension URLSession {
                 completion(result)
             }
         }
+        
         let task = dataTask(with: request, completionHandler: { data, response, error in
             if let data = data,
                let response = response,

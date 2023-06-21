@@ -1,6 +1,11 @@
 import Foundation
 import UIKit
 
+
+protocol AuthViewControllerDelegate: AnyObject {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+}
+
 final class SplashViewController: UIViewController {
     // MARK: - Properties:
     private let showAuthenticationScreenSegue = "AuthenticationScreenSegue"
