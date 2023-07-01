@@ -2,6 +2,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     //MARK: - Properties:
+    private let profileService = ProfileService.shared
     private lazy var profileImage: UIImageView = {
         var profileImage = #imageLiteral(resourceName: "myPhoto")
         let imageView = UIImageView(image: profileImage)
@@ -56,11 +57,17 @@ final class ProfileViewController: UIViewController {
     private func turnOfAutoresizing(_ view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
     }
-    
+    private func updateProfileDetails() {
+        profileNameLabel.text = profileService.profile?.name
+        logInLabel.text = profileService.profile?.loginName
+        statusLabel.text = profileService.profile?.bio
+    }
     //MARK: - LifyCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
+      
+        updateProfileDetails()
         
         turnOfAutoresizing(profileImage)
         addToView(profileImage)
