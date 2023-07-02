@@ -6,7 +6,6 @@ struct ProfileResult: Codable {
     let firstName: String
     let lastName: String
     let bio: String?
-    let profileImage: URL
 }
 struct Profile {
     let username: String
@@ -17,7 +16,7 @@ struct Profile {
     init(profileResult: ProfileResult) {
         self.username = profileResult.username
         self.name = "\(profileResult.firstName) \(profileResult.lastName)"
-        self.loginName = "(@\(profileResult.username)"
+        self.loginName = "@\(profileResult.username)"
         self.bio = profileResult.bio
     }
 }
@@ -25,7 +24,6 @@ struct Profile {
 final class ProfileService {
     // MARK: - Properties:
     static let shared = ProfileService()
-    private var bearerToken = OAuth2TokenStorage().token
     private let urlSession = URLSession.shared
     
     private var task: URLSessionTask?
@@ -68,7 +66,7 @@ final class ProfileService {
     // MARK: - Private Methods:
     private func profileRequest(token: String) -> URLRequest {
         var request = URLRequest.makeHTTPRequest(path: "me", httpMethod: "GET", baseURL: DefaultBaseURL!)
-        request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
         return request
     }
 }
