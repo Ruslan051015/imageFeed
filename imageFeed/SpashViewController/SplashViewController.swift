@@ -13,6 +13,7 @@ final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -41,7 +42,8 @@ final class SplashViewController: UIViewController {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success:
+            case .success(let profile):
+                profileImageService.fetchImageURL(username: profile.username) { _  in }
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
             case .failure:

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4A0D45512A4F83940061A138 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0D45502A4F83940061A138 /* UIBlockingProgressHUD.swift */; };
 		4A1EFAA92A0D33C7004CEF67 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1EFAA82A0D33C7004CEF67 /* ProfileViewController.swift */; };
+		4A5723312A51F46900225736 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5723302A51F46900225736 /* ProfileImageService.swift */; };
 		4A860EF12A2E717800008F29 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A860EF02A2E717800008F29 /* AuthViewController.swift */; };
 		4A8CC5452A5074EF0050BFD4 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8CC5442A5074EF0050BFD4 /* ProfileService.swift */; };
 		4A8D7CD12A1A98CE00CCE558 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D7CD02A1A98CE00CCE558 /* UIColor+Extension.swift */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		4A0D45502A4F83940061A138 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		4A1EFAA82A0D33C7004CEF67 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		4A5723302A51F46900225736 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		4A860EF02A2E717800008F29 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		4A8CC5442A5074EF0050BFD4 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		4A8D7CD02A1A98CE00CCE558 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 			children = (
 				4A1EFAA82A0D33C7004CEF67 /* ProfileViewController.swift */,
 				4A8CC5442A5074EF0050BFD4 /* ProfileService.swift */,
+				4A5723302A51F46900225736 /* ProfileImageService.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				4AFBFCB62A377C5500C027AA /* OAuth2Service.swift in Sources */,
 				4ACDB7742A1136880013056E /* SingleImageViewController.swift in Sources */,
 				4AF1595529FE879F001032C0 /* SceneDelegate.swift in Sources */,
+				4A5723312A51F46900225736 /* ProfileImageService.swift in Sources */,
 				4A860EF12A2E717800008F29 /* AuthViewController.swift in Sources */,
 				4AB82D8D2A3CBF5B00F55289 /* OAuth2TokenStorage.swift in Sources */,
 				4AD6BFEC2A2A1BA8004B80D9 /* Constants.swift in Sources */,
