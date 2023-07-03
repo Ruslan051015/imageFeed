@@ -3,6 +3,7 @@ import UIKit
 final class ProfileViewController: UIViewController {
     //MARK: - Properties:
     private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     private lazy var profileImage: UIImageView = {
         var profileImage = #imageLiteral(resourceName: "myPhoto")
         let imageView = UIImageView(image: profileImage)
@@ -62,9 +63,24 @@ final class ProfileViewController: UIViewController {
         logInLabel.text = profileService.profile?.loginName
         statusLabel.text = profileService.profile?.bio
     }
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+    }
     //MARK: - LifyCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) {
+                 [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+        
         view.backgroundColor = .ypBlack
       
         updateProfileDetails()

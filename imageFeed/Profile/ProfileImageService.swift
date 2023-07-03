@@ -6,6 +6,7 @@ struct UserResult: Codable {
 
 final class ProfileImageService {
     // MARK: - Properties:
+    static let DidChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     static let shared = ProfileImageService()
     private let urlSession = URLSession.shared
     
@@ -33,6 +34,8 @@ final class ProfileImageService {
                 DispatchQueue.main.async {
                     let profileImageURL = imageData.profileImage
                     completion(.success(profileImageURL))
+                    NotificationCenter.default
+                        .post(name: ProfileImageService.DidChangeNotification, object: self, userInfo: ["URL": profileImageURL])
                     self.task = nil
                     self.avatarURL = profileImageURL
                 }
