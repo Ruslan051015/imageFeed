@@ -52,7 +52,7 @@ final class ProfileImageService {
     
     // MARK: - Private Methods:
     private func imageRequest(username: String, token: String) -> URLRequest {
-        var request = URLRequest.makeHTTPRequest(path: "users/:\(username)", httpMethod: "GET")
+        var request = URLRequest.makeHTTPRequest(path: "users/:\(username)", httpMethod: "GET", baseURL: DefaultBaseURL!)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
