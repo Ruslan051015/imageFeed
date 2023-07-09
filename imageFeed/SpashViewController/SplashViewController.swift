@@ -43,16 +43,29 @@ final class SplashViewController: UIViewController {
             guard let self = self else { return }
             switch result {
             case .success(let profile):
-                profileImageService.fetchImageURL(username: profile.username) { _  in }
+                profileImageService.fetchImageURL(username: profile.username) { [weak self] result   in
+                    switch result {
+                    case .success(let imageUrl):
+                        print(imageUrl)
+                    case .failure(_):
+                        self?.showAlert(title: "Что-то пошло не так", message: "Не удалость загрузить фото профиля")
+                    }
+                }
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                print("Something went wrong!")
-                // TODO [Sprint 11] Show error
+                self.showAlert(title: "Что-то пошло не так(", message: "Не удалось войти в профиль")
                 break
             }
         }
+    }
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(alertAction)
+        present(alert, animated: true)
+        
     }
 }
 
@@ -72,8 +85,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.fetchProfile(token: token)
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                print("Something went wrong!")
-                // TODO [Sprint 11]
+                self.showAlert(title: "Что-то пошло не так(", message: "Не удалось получить токен")
                 break
             }
         }

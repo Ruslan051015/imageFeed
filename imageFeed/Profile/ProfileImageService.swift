@@ -22,39 +22,38 @@ final class ProfileImageService {
         task?.cancel()
         
         let request = imageRequest(username: username, token: token)
-        let task = urlSession.dataTask(with: request) { [weak self] data, response, error  in
+        object(for: request) { [weak self] result in
             guard let self = self else { return }
-            if let data = data,
-               let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode,
-               200...300 ~= statusCode {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                guard let imageData = try? decoder.decode(UserResult.self, from: data) else { return }
-                DispatchQueue.main.async {
-                    let profileImageURL = imageData.profileImage
-                    completion(.success(profileImageURL))
-                    NotificationCenter.default
-                        .post(name: ProfileImageService.DidChangeNotification, object: self, userInfo: ["URL": profileImageURL])
-                    self.task = nil
-                    self.avatarURL = profileImageURL
-                }
-            } else if let error {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
+            switch result {
+            case .success(let profile):
+                let profileImageURL = profile.profileImage
+                self.avatarURL = profileImageURL
+                completion(.success(profileImageURL))
+                NotificationCenter.default.post(name: ProfileImageService.DidChangeNotification, object: self, userInfo: ["URL": avatarURL!])
+            case .failure(let error):
+                completion(.failure(error))
+                if case URLSession.NetworkError.urlSessionError = error {
                     self.lastToken = nil
                 }
             }
         }
-        self.task = task
-        task.resume()
     }
     
     // MARK: - Private Methods:
     private func imageRequest(username: String, token: String) -> URLRequest {
-        var request = URLRequest.makeHTTPRequest(path: "users/:\(username)", httpMethod: "GET", baseURL: DefaultBaseURL!)
+        var request = URLRequest.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET", baseURL: DefaultBaseURL!)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
+    }
+    private func object(
+        for request: URLRequest,
+        completion: @escaping (Result<UserResult, Error>) -> Void) {
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
+            completion(result)
+            self?.task = nil
+        }
+        self.task = task
+        task.resume()
     }
 }
 

@@ -1,20 +1,17 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     //MARK: - Properties:
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     private lazy var profileImage: UIImageView = {
-        var profileImage = #imageLiteral(resourceName: "myPhoto")
-        let imageView = UIImageView(image: profileImage)
-        
+        let imageView = UIImageView()
         return imageView
     }()
     private lazy var logOutButton: UIButton = {
         let logOutImage = UIImage(named: "logOut_logo")
         let button = UIButton.systemButton(with: logOutImage!, target: self, action: #selector(didTapLogOutButton))
-        //        let button = UIButton(type: .system)
-        //        button.addTarget(self, action: #selector(didTapLogOutButton), for: .touchUpInside)
         button.imageView?.image = logOutImage
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -68,6 +65,7 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
+        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [.transition(.fade(1))])
     }
     //MARK: - LifyCycle:
     override func viewDidLoad() {
@@ -80,10 +78,9 @@ final class ProfileViewController: UIViewController {
                 self.updateAvatar()
             }
         updateAvatar()
+        updateProfileDetails()
         
         view.backgroundColor = .ypBlack
-      
-        updateProfileDetails()
         
         turnOfAutoresizing(profileImage)
         addToView(profileImage)

@@ -38,35 +38,35 @@ final class ProfileService {
         task?.cancel()
         
         let request = profileRequest(token: token)
-        let task = urlSession.dataTask(with: request) { [weak self] data, response, error in
-            if let data = data,
-               let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode,
-               200...300 ~= statusCode {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                guard let profileData = try? decoder.decode(ProfileResult.self, from: data) else
-                { return }
-                DispatchQueue.main.async {
-                    let profile = Profile(profileResult: profileData)
-                    completion(.success(profile))
-                    self?.profile = profile
-                    self?.task = nil
-                }
-            } else if let error {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                    self?.task = nil
+        object(for: request) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let profileResult):
+                let profile = Profile(profileResult: profileResult)
+                self.profile = profile
+                completion(.success(profile))
+            case .failure(let error):
+                completion(.failure(error))
+                if case URLSession.NetworkError.urlSessionError = error {
+                    self.lastToken = nil
                 }
             }
         }
-        self.task = task
-        task.resume()
     }
     // MARK: - Private Methods:
     private func profileRequest(token: String) -> URLRequest {
-        var request = URLRequest.makeHTTPRequest(path: "me", httpMethod: "GET", baseURL: DefaultBaseURL!)
+        var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", baseURL: DefaultBaseURL!)
         request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
         return request
     }
+    func object(
+        for request: URLRequest,
+        completion: @escaping (Result<ProfileResult, Error>) -> Void) {
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
+                completion(result)
+                self?.task = nil
+            }
+            self.task = task
+            task.resume()
+        }
 }

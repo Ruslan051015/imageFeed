@@ -26,11 +26,10 @@ final class OAuth2Service {
             lastCode = code
             
             let request = authTokenRequest(code: code)
-            let task = object(for: request) { [weak self] result in
+            object(for: request) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let body):
-                    self.task = nil
                     let authToken = body.accessToken
                     self.authToken = authToken
                     completion(.success(authToken))
@@ -39,24 +38,19 @@ final class OAuth2Service {
                     completion(.failure(error))
                 }
             }
-            self.task = task
-            task.resume()
         }
 }
 
 private extension OAuth2Service {
     func object(
         for request: URLRequest,
-        completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
-    ) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
-            let response = result.flatMap { data -> Result<OAuthTokenResponseBody, Error> in
-                Result { try decoder.decode(OAuthTokenResponseBody.self, from: data) }
-            }
-            completion(response)
+        completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            completion(result)
+            self?.task = nil
         }
+        self.task = task
+        task.resume()
     }
     
     func authTokenRequest(code: String) -> URLRequest {
@@ -90,9 +84,4 @@ extension URLRequest {
         return request
     }
 }
-// MARK: - Network Connection
-enum NetworkError: Error {
-    case httpStatusCode(Int)
-    case urlRequestError(Error)
-    case urlSessionError
-}
+

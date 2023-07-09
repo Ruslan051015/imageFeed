@@ -29,10 +29,10 @@ final class WebViewViewController: UIViewController {
         let url = urlComponents.url!
         let request = URLRequest(url: url)
         webView.load(request)
-        estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [], changeHandler: { [weak self] _, _ in
+        estimatedProgressObservation = webView.observe(\.estimatedProgress, options: []) { [weak self] _ , _ in
             guard let self = self else { return }
             self.updateProgress()
-        })
+        }
     }
     // MARK: - Methods:
     private func updateProgress() {
