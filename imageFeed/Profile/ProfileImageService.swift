@@ -1,7 +1,12 @@
 import Foundation
 
 struct UserResult: Codable {
-    let profileImage: String
+    let profileImage: ProfileImage
+}
+struct ProfileImage: Codable {
+    let small: String
+    let medium: String
+    let large: String
 }
 
 final class ProfileImageService {
@@ -20,13 +25,14 @@ final class ProfileImageService {
         guard let token = OAuth2TokenStorage().token else { return }
         if lastToken == token { return }
         task?.cancel()
+        lastToken = token
         
         let request = imageRequest(username: username, token: token)
         object(for: request) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let profile):
-                let profileImageURL = profile.profileImage
+                let profileImageURL = profile.profileImage.small
                 self.avatarURL = profileImageURL
                 completion(.success(profileImageURL))
                 NotificationCenter.default.post(name: ProfileImageService.DidChangeNotification, object: self, userInfo: ["URL": avatarURL!])
