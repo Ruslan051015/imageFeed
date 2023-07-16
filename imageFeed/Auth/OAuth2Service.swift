@@ -1,21 +1,25 @@
 import Foundation
 
 final class OAuth2Service {
+    // MARK: - Properties:
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
-    
+    private let builder: URLRequestBuilder
     private var task: URLSessionTask?
     private var lastCode: String?
     
     private (set) var authToken: String? {
         get {
-            return OAuth2TokenStorage().token
+            return OAuth2TokenStorage.shared.token
         }
         set {
-            OAuth2TokenStorage().token = newValue
+            OAuth2TokenStorage.shared.token = newValue
         }
     }
-    
+    init(builder: URLRequestBuilder = .shared) {
+        self.builder = builder
+    }
+    // MARK: - Methods:
     func fetchOAuthToken(
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void ){
@@ -25,7 +29,8 @@ final class OAuth2Service {
             task?.cancel()
             lastCode = code
             
-            let request = authTokenRequest(code: code)
+            guard let request = authTokenRequest(code: code) else {
+                return assertionFailure("Невозможно сформировать запрос!")}
             object(for: request) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
@@ -45,24 +50,24 @@ private extension OAuth2Service {
     func object(
         for request: URLRequest,
         completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
-        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
-            completion(result)
-            self?.task = nil
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+                completion(result)
+                self?.task = nil
+            }
+            self.task = task
+            task.resume()
         }
-        self.task = task
-        task.resume()
-    }
     
-    func authTokenRequest(code: String) -> URLRequest {
-        URLRequest.makeHTTPRequest(
+    func authTokenRequest(code: String) -> URLRequest? {
+        builder.makeHTTPRequest(
             path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
+            + "?client_id=\(Constants.accessKey)"
+            + "&&client_secret=\(Constants.secretKey)"
+            + "&&redirect_uri=\(Constants.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
+            baseURLString: Constants.baseURLString
         ) }
     
     struct OAuthTokenResponseBody: Decodable {
@@ -70,18 +75,6 @@ private extension OAuth2Service {
         let tokenType: String
         let scope: String
         let createdAt: Int
-    }
-}
-// MARK: - HTTP Request
-extension URLRequest {
-    static func makeHTTPRequest(
-        path: String,
-        httpMethod: String,
-        baseURL: URL = DefaultBaseURL!
-    ) -> URLRequest {
-        var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
-        request.httpMethod = httpMethod
-        return request
     }
 }
 

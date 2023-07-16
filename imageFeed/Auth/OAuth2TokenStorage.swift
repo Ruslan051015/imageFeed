@@ -2,6 +2,7 @@ import Foundation
 
 final class OAuth2TokenStorage {
     // MARK: - Properties:
+    static let shared = OAuth2TokenStorage()
     private var userDefaults = UserDefaults.standard
     var token: String? {
         get {

@@ -5,6 +5,7 @@ final class ProfileViewController: UIViewController {
     //MARK: - Properties:
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -65,7 +66,11 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [.transition(.fade(1))])
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [
+            .processor(processor),
+            .transition(.fade(1))])
     }
     //MARK: - LifyCycle:
     override func viewDidLoad() {
@@ -77,6 +82,7 @@ final class ProfileViewController: UIViewController {
                 guard let self = self else { return }
                 self.updateAvatar()
             }
+        
         updateAvatar()
         updateProfileDetails()
         

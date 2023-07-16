@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-import ProgressHUD
 
 
 protocol AuthViewControllerDelegate: AnyObject {
@@ -21,8 +20,11 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let token = oauth2TokenStorage.token {
-            fetchProfile(token: token)
-            switchToTabBarController()
+            UIBlockingProgressHUD.show()
+            fetchProfile { [weak self] in
+                UIBlockingProgressHUD.dismiss()
+                self?.switchToTabBarController()
+            }
         } else {
             performSegue(withIdentifier: showAuthenticationScreenSegue, sender: nil)
         }
@@ -38,12 +40,16 @@ final class SplashViewController: UIViewController {
             .instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
     }
-    private func fetchProfile(token: String) {
-        profileService.fetchProfile(token) { [weak self] result in
-            guard let self = self else { return }
+    private func fetchProfile(completion: @escaping () -> Void) {
+        profileService.fetchProfile() { [weak self] result in
+            guard let self = self else {
+                assertionFailure("Обработка ответа от fetchProfile")
+                return
+            }
             switch result {
             case .success(let profile):
-                profileImageService.fetchImageURL(username: profile.username) { [weak self] result   in
+                self.switchToTabBarController()
+                self.profileImageService.fetchImageURL(username: profile.username) { [weak self] result in
                     switch result {
                     case .success(let imageUrl):
                         print(imageUrl)
@@ -51,13 +57,11 @@ final class SplashViewController: UIViewController {
                         self?.showAlert(title: "Что-то пошло не так", message: "Не удалость загрузить фото профиля")
                     }
                 }
-                UIBlockingProgressHUD.dismiss()
-                self.switchToTabBarController()
             case .failure:
-                UIBlockingProgressHUD.dismiss()
                 self.showAlert(title: "Что-то пошло не так(", message: "Не удалось войти в профиль")
                 break
             }
+            completion()
         }
     }
     private func showAlert(title: String, message: String) {
@@ -81,9 +85,11 @@ extension SplashViewController: AuthViewControllerDelegate {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let token):
-                self.fetchProfile(token: token)
-            case .failure:
+            case .success(_):
+                self.fetchProfile {
+                    UIBlockingProgressHUD.dismiss()
+                }
+            case .failure(_):
                 UIBlockingProgressHUD.dismiss()
                 self.showAlert(title: "Что-то пошло не так(", message: "Не удалось получить токен")
                 break

@@ -4,7 +4,7 @@ import UIKit
 struct ProfileResult: Codable {
     let username: String
     let firstName: String
-    let lastName: String
+    let lastName: String?
     let bio: String?
 }
 struct Profile {
@@ -15,7 +15,7 @@ struct Profile {
     
     init(profileResult: ProfileResult) {
         self.username = profileResult.username
-        self.name = "\(profileResult.firstName) \(profileResult.lastName)"
+        self.name = "\(profileResult.firstName) \(profileResult.lastName ?? "")"
         self.loginName = "@\(profileResult.username)"
         self.bio = profileResult.bio
     }
@@ -25,19 +25,23 @@ final class ProfileService {
     // MARK: - Properties:
     static let shared = ProfileService()
     private let urlSession = URLSession.shared
+    private let builder: URLRequestBuilder
     
     private var task: URLSessionTask?
     private var lastToken: String?
     
     private (set) var profile: Profile?
-    
+    init(builder: URLRequestBuilder = .shared) {
+        self.builder = builder
+    }
     // MARK: - Methods:
-    func fetchProfile(_ token: String, completion: @escaping (Result<Profile,Error>) -> Void) {
+    func fetchProfile(completion: @escaping (Result<Profile,Error>) -> Void) {
         assert(Thread.isMainThread)
-        if lastToken == token { return }
         task?.cancel()
         
-        let request = profileRequest(token: token)
+       guard let request = profileRequest() else {
+           return assertionFailure("Невозможно сформировать запрос!")}
+        
         object(for: request) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -54,11 +58,11 @@ final class ProfileService {
         }
     }
     // MARK: - Private Methods:
-    private func profileRequest(token: String) -> URLRequest {
-        var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", baseURL: DefaultBaseURL!)
-        request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
-        return request
-    }
+    private func profileRequest() -> URLRequest? {
+        builder.makeHTTPRequest(path: "/me",
+                                httpMethod: "GET",
+                                baseURLString: Constants.defaultApiBaseURLString)}
+    
     func object(
         for request: URLRequest,
         completion: @escaping (Result<ProfileResult, Error>) -> Void) {
@@ -70,3 +74,4 @@ final class ProfileService {
             task.resume()
         }
 }
+
