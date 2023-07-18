@@ -1,4 +1,5 @@
 import Foundation
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
     // MARK: - Properties:
@@ -6,10 +7,14 @@ final class OAuth2TokenStorage {
     private var userDefaults = UserDefaults.standard
     var token: String? {
         get {
-            userDefaults.string(forKey: Keys.bearerToken.rawValue)
+            KeychainWrapper.standard.string(forKey: Keys.bearerToken.rawValue)
         }
         set {
-           userDefaults.set(newValue, forKey: Keys.bearerToken.rawValue)
+            guard KeychainWrapper.standard.set(newValue ?? "", forKey: Keys.bearerToken.rawValue)
+            else {
+                assertionFailure("Не удалось сохранить токен")
+                return
+            }
         }
     }
     // MARK: - Keys for UserDefaults:
