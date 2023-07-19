@@ -8,6 +8,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
+
         return imageView
     }()
     private lazy var logOutButton: UIButton = {
