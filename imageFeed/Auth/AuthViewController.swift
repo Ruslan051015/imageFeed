@@ -33,7 +33,7 @@ final class AuthViewController: UIViewController {
         button.layer.masksToBounds = true
         return button
     }()
-    // MARK: - Methods:
+    // MARK: - Private Methods:
     private func addToView(_ view: UIView) {
         self.view.addSubview(view)
     }

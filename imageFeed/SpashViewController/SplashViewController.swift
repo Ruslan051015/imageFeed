@@ -16,6 +16,11 @@ final class SplashViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    private let screenLogo: UIImageView = {
+        let imageview = UIImageView()
+        imageview.image = #imageLiteral(resourceName: "Vector")
+        return imageview
+    }()
     // MARK: - LifeCycle:
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -26,14 +31,41 @@ final class SplashViewController: UIViewController {
                 self?.switchToTabBarController()
             }
         } else {
-            performSegue(withIdentifier: showAuthenticationScreenSegue, sender: nil)
+            guard let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+                assertionFailure("Не удалось создать AuthViewController!")
+                return }
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true)
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        turnOfAutoresizing(screenLogo)
+        addToView(screenLogo)
+        view.backgroundColor = .ypBlack
+        NSLayoutConstraint.activate([
+            screenLogo.widthAnchor.constraint(equalToConstant: 75),
+            screenLogo.heightAnchor.constraint(equalToConstant: 78),
+            screenLogo.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            screenLogo.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
     }
-    // MARK: - Methods:
+    // MARK: - Private Methods:
+    private func addToView(_ view: UIView) {
+        self.view.addSubview(view)
+    }
+    
+    private func turnOfAutoresizing(_ view: UIView) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
@@ -94,17 +126,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.showAlert(title: "Что-то пошло не так(", message: "Не удалось получить токен")
                 break
             }
-        }
-    }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthenticationScreenSegue {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for \(showAuthenticationScreenSegue)") }
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
         }
     }
 }
