@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-
+import SwiftKeychainWrapper
 
 protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
@@ -56,6 +56,7 @@ final class SplashViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+//        let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "bearerToken")
     }
     // MARK: - Private Methods:
     private func addToView(_ view: UIView) {
@@ -74,14 +75,14 @@ final class SplashViewController: UIViewController {
     }
     private func fetchProfile(completion: @escaping () -> Void) {
         profileService.fetchProfile() { [weak self] result in
-            guard let self = self else {
-                assertionFailure("Обработка ответа от fetchProfile")
-                return
-            }
+//            guard let self = self else {
+//                assertionFailure("Обработка ответа от fetchProfile")
+//                return
+//            }
             switch result {
             case .success(let profile):
-                self.switchToTabBarController()
-                self.profileImageService.fetchImageURL(username: profile.username) { [weak self] result in
+                self?.switchToTabBarController()
+                self?.profileImageService.fetchImageURL(username: profile.username) { [weak self] result in
                     switch result {
                     case .success(let imageUrl):
                         print(imageUrl)
@@ -90,7 +91,7 @@ final class SplashViewController: UIViewController {
                     }
                 }
             case .failure:
-                self.showAlert(title: "Что-то пошло не так(", message: "Не удалось войти в профиль")
+                self?.showAlert(title: "Что-то пошло не так(", message: "Не удалось войти в профиль")
                 break
             }
             completion()
