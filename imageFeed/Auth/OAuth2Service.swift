@@ -4,10 +4,10 @@ final class OAuth2Service {
     // MARK: - Properties:
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
-    private let builder: URLRequestBuilder
+    private let builder = URLRequestBuilder.shared
+    private let storage = OAuth2TokenStorage.shared
     private var task: URLSessionTask?
     private var lastCode: String?
-    
     private (set) var authToken: String? {
         get {
             return OAuth2TokenStorage.shared.token
@@ -16,8 +16,8 @@ final class OAuth2Service {
             OAuth2TokenStorage.shared.token = newValue
         }
     }
-    init(builder: URLRequestBuilder = .shared) {
-        self.builder = builder
+    var isAuthenticated: Bool {
+        storage.token != nil
     }
     // MARK: - Methods:
     func fetchOAuthToken(

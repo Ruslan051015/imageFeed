@@ -62,6 +62,7 @@ final class AuthViewController: UIViewController {
     // MARK: - LifeCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .ypBlack
         turnOfAutoresizing(authImage)
         addToView(authImage)

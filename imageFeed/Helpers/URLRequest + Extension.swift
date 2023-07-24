@@ -3,10 +3,8 @@ import Foundation
 final class URLRequestBuilder {
     // MARK: - Properties:
     static let shared = URLRequestBuilder()
-    private let storage:  OAuth2TokenStorage
-    init(storage: OAuth2TokenStorage = .shared) {
-        self.storage = storage
-    }
+    private let storage = OAuth2TokenStorage.shared
+   
     // MARK: - Merhods:
     func makeHTTPRequest(
         path: String,

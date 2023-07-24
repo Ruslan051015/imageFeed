@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-import SwiftKeychainWrapper
 
 protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
@@ -24,24 +23,11 @@ final class SplashViewController: UIViewController {
     // MARK: - LifeCycle:
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let token = oauth2TokenStorage.token {
-            UIBlockingProgressHUD.show()
-            fetchProfile { [weak self] in
-                UIBlockingProgressHUD.dismiss()
-                self?.switchToTabBarController()
-            }
-        } else {
-            guard let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
-                assertionFailure("Не удалось создать AuthViewController!")
-                return }
-            authViewController.delegate = self
-            authViewController.modalPresentationStyle = .fullScreen
-            present(authViewController, animated: true)
-        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkAuthStatus()
         
         turnOfAutoresizing(screenLogo)
         addToView(screenLogo)
@@ -56,7 +42,6 @@ final class SplashViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-//        let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "bearerToken")
     }
     // MARK: - Private Methods:
     private func addToView(_ view: UIView) {
@@ -75,10 +60,6 @@ final class SplashViewController: UIViewController {
     }
     private func fetchProfile(completion: @escaping () -> Void) {
         profileService.fetchProfile() { [weak self] result in
-//            guard let self = self else {
-//                assertionFailure("Обработка ответа от fetchProfile")
-//                return
-//            }
             switch result {
             case .success(let profile):
                 self?.switchToTabBarController()
@@ -98,14 +79,35 @@ final class SplashViewController: UIViewController {
         }
     }
     private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(alertAction)
-        present(alert, animated: true)
-        
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let alertAction = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(alertAction)
+    }
+    
+    private func showAuthController() {
+        DispatchQueue.main.async {
+            guard let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+                assertionFailure("Не удалось создать AuthViewController!")
+                return }
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            self.present(authViewController, animated: true)
+        }
+    }
+    private func checkAuthStatus() {
+        if oauth2Service.isAuthenticated {
+            UIBlockingProgressHUD.show()
+            
+            fetchProfile { [weak self] in
+                UIBlockingProgressHUD.dismiss()
+                self?.switchToTabBarController()
+            }
+        } else {
+            showAuthController()
+        }
     }
 }
-
+// MARK: - Extensions
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         UIBlockingProgressHUD.show()
