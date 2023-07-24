@@ -45,7 +45,7 @@ final class OAuth2Service {
             }
         }
 }
-
+    // MARK: Extensions:
 private extension OAuth2Service {
     func object(
         for request: URLRequest,
@@ -69,12 +69,6 @@ private extension OAuth2Service {
             httpMethod: "POST",
             baseURLString: Constants.baseURLString
         ) }
-    
-    struct OAuthTokenResponseBody: Decodable {
-        let accessToken: String
-        let tokenType: String
-        let scope: String
-        let createdAt: Int
-    }
+  
 }
 

@@ -275,6 +275,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="au1-Je-ZcG"/>
                     <connections>
+                        <outlet property="backButton" destination="VPf-cb-Y0o" id="1Kg-so-WeQ"/>
                         <outlet property="progressView" destination="sg3-Tb-f5H" id="bkG-iv-ULK"/>
                         <outlet property="webView" destination="BFw-Cf-P1X" id="T9g-dV-2jC"/>
                     </connections>

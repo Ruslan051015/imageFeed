@@ -8,7 +8,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
-
+        
         return imageView
     }()
     private lazy var logOutButton: UIButton = {
@@ -79,7 +79,7 @@ final class ProfileViewController: UIViewController {
         
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) {
-                 [weak self] _ in
+                [weak self] _ in
                 guard let self = self else { return }
                 self.updateAvatar()
             }

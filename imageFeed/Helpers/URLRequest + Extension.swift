@@ -4,7 +4,6 @@ final class URLRequestBuilder {
     // MARK: - Properties:
     static let shared = URLRequestBuilder()
     private let storage = OAuth2TokenStorage.shared
-   
     // MARK: - Merhods:
     func makeHTTPRequest(
         path: String,

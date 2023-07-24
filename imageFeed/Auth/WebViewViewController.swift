@@ -8,17 +8,17 @@ final class WebViewViewController: UIViewController {
     private var estimatedProgressObservation: NSKeyValueObservation?
     // MARK: - Outlets:
     @IBOutlet private weak var webView: WKWebView!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet private weak var progressView: UIProgressView!
-    // MARK: - Actions:
-    @IBAction private func didTapBackButton(_ sender: Any) {
-        delegate?.webViewControllerDidCancel(self)
-    }
     // MARK: - LifeCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.navigationDelegate = self
-        
-        var urlComponents = URLComponents(string: Constants.unsplashAuthorizeURLString)!
+    
+        guard var urlComponents = URLComponents(string: Constants.unsplashAuthorizeURLString) else {
+            assertionFailure("Невозможно сформировать url!")
+            return
+            }
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
@@ -33,10 +33,14 @@ final class WebViewViewController: UIViewController {
             self.updateProgress()
         }
     }
-    // MARK: - Methods:
+    // MARK: - Private Methods:
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+    // MARK: - Actions:
+    @IBAction private func didTapBackButton(_ sender: Any) {
+delegate?.webViewControllerDidCancel(self)
     }
 }
 
@@ -47,8 +51,8 @@ extension WebViewViewController: WKNavigationDelegate {
             let urlComponents = URLComponents(string: url.absoluteString),
             urlComponents.path == "/oauth/authorize/native",
             let items = urlComponents.queryItems,
-            let codeItem = items.first(where: {  $0.name == "code"  })
-        { return codeItem.value
+            let codeItem = items.first(where: {  $0.name == "code"  }) {
+            return codeItem.value
         } else {
             return nil
         }

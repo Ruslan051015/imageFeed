@@ -1,34 +1,25 @@
 import Foundation
 
-struct UserResult: Codable {
-    let profileImage: ProfileImage
-}
-struct ProfileImage: Codable {
-    let small: String?
-    let medium: String?
-    let large: String?
-}
-
 final class ProfileImageService {
     // MARK: - Properties:
     static let DidChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     static let shared = ProfileImageService()
     private let urlSession = URLSession.shared
-    private let builder: URLRequestBuilder
+    private let builder = URLRequestBuilder.shared
     private let storage = OAuth2TokenStorage.shared
     
     private var task: URLSessionTask?
     private var lastToken: String?
     
     private (set) var avatarURL: String?
-    init(builder: URLRequestBuilder = .shared) {
-        self.builder = builder
-    }
     // MARK: - Methods:
     func fetchImageURL(username: String, _ completion: @escaping (Result<String,Error>) -> Void) {
         assert(Thread.isMainThread)
-        guard let token = storage.token else { return }
-        if lastToken == token { return }
+        
+        guard
+            let token = storage.token,
+            lastToken != token
+        else { return }
         task?.cancel()
         lastToken = token
         
@@ -62,12 +53,12 @@ final class ProfileImageService {
     private func object(
         for request: URLRequest,
         completion: @escaping (Result<UserResult, Error>) -> Void) {
-        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
-            completion(result)
-            self?.task = nil
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
+                completion(result)
+                self?.task = nil
+            }
+            self.task = task
+            task.resume()
         }
-        self.task = task
-        task.resume()
-    }
 }
 
