@@ -12,6 +12,7 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private var wasChecked: Bool = false
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -23,11 +24,11 @@ final class SplashViewController: UIViewController {
     // MARK: - LifeCycle:
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        checkAuthStatus()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkAuthStatus()
         
         turnOfAutoresizing(screenLogo)
         addToView(screenLogo)
@@ -85,16 +86,17 @@ final class SplashViewController: UIViewController {
     }
     
     private func showAuthController() {
-        DispatchQueue.main.async {
-            guard let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
-                assertionFailure("Не удалось создать AuthViewController!")
-                return }
-            authViewController.delegate = self
-            authViewController.modalPresentationStyle = .fullScreen
-            self.present(authViewController, animated: true)
-        }
+        guard let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+            assertionFailure("Не удалось создать AuthViewController!")
+            return }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        self.present(authViewController, animated: true)
     }
     private func checkAuthStatus() {
+        guard !wasChecked else { return }
+        
+        wasChecked = true
         if oauth2Service.isAuthenticated {
             UIBlockingProgressHUD.show()
             
