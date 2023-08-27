@@ -1,18 +1,19 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     //MARK: - Properties:
+    private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     private lazy var profileImage: UIImageView = {
-        var profileImage = #imageLiteral(resourceName: "myPhoto")
-        let imageView = UIImageView(image: profileImage)
+        let imageView = UIImageView()
         
         return imageView
     }()
     private lazy var logOutButton: UIButton = {
         let logOutImage = UIImage(named: "logOut_logo")
         let button = UIButton.systemButton(with: logOutImage!, target: self, action: #selector(didTapLogOutButton))
-        //        let button = UIButton(type: .system)
-        //        button.addTarget(self, action: #selector(didTapLogOutButton), for: .touchUpInside)
         button.imageView?.image = logOutImage
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -56,10 +57,36 @@ final class ProfileViewController: UIViewController {
     private func turnOfAutoresizing(_ view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
     }
-    
+    private func updateProfileDetails() {
+        profileNameLabel.text = profileService.profile?.name
+        logInLabel.text = profileService.profile?.loginName
+        statusLabel.text = profileService.profile?.bio
+    }
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [
+            .processor(processor),
+            .transition(.fade(1))])
+    }
     //MARK: - LifyCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) {
+                [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        
+        updateAvatar()
+        updateProfileDetails()
+        
         view.backgroundColor = .ypBlack
         
         turnOfAutoresizing(profileImage)
