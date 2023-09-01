@@ -11,6 +11,7 @@ final class ImagesListService {
     // MARK: - Methods
     func fetchPhotosNextPage() {
         guard task == nil else { return }
+        
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
             return assertionFailure("Невозможно сформировать запрос!")}
@@ -37,6 +38,7 @@ final class ImagesListService {
         var url = urlComponents.url!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+        print(request)
         return request
     }
     
