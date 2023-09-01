@@ -3,4 +3,320 @@
    uuid = "5021BD03-1559-416C-91C1-F5B3EA0B90FF"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "44773017-33BB-4CB6-8AB8-0B674DE562A0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "imageFeed/ImagesList/ImagesListService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "fetchPhotosNextPage()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D716B35E-0E92-41A0-9E23-72E9EAFF13A4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "imageFeed/ImagesList/ImagesListService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "fetchPhotosNextPage()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2DB7989-ABAE-4A39-8732-FAC1FA67E688"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "imageFeed/ImagesList/ImagesListService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "fetchPhotosNextPage()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D2DB7989-ABAE-4A39-8732-FAC1FA67E688 - 2909749c2d5c9678"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "916">
+               </Location>
+               <Location
+                  uuid = "D2DB7989-ABAE-4A39-8732-FAC1FA67E688 - b617433c343e9e57"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "280">
+               </Location>
+               <Location
+                  uuid = "D2DB7989-ABAE-4A39-8732-FAC1FA67E688 - 2909749c2d5c9678"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "884">
+               </Location>
+               <Location
+                  uuid = "D2DB7989-ABAE-4A39-8732-FAC1FA67E688 - b617433c343e9eba"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "20"
+                  endingLineNumber = "20"
+                  offsetFromSymbolStart = "288">
+               </Location>
+               <Location
+                  uuid = "D2DB7989-ABAE-4A39-8732-FAC1FA67E688 - b617433c343e9e95"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "288">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B42DFC3D-33A3-457A-9296-255627CCE0F0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "imageFeed/ImagesList/ImagesListService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "fetchPhotosNextPage()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B42DFC3D-33A3-457A-9296-255627CCE0F0 - b617433c343e9d19"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "400">
+               </Location>
+               <Location
+                  uuid = "B42DFC3D-33A3-457A-9296-255627CCE0F0 - b617433c343e9eba"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "20"
+                  endingLineNumber = "20"
+                  offsetFromSymbolStart = "288">
+               </Location>
+               <Location
+                  uuid = "B42DFC3D-33A3-457A-9296-255627CCE0F0 - b617433c343e9e95"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "288">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "958509CD-3075-4FBB-8467-96493D2411B8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "imageFeed/ImagesList/ImagesListService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "fetchPhotosNextPage()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "958509CD-3075-4FBB-8467-96493D2411B8 - b617433c343e9d3e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "24"
+                  endingLineNumber = "24"
+                  offsetFromSymbolStart = "452">
+               </Location>
+               <Location
+                  uuid = "958509CD-3075-4FBB-8467-96493D2411B8 - b617433c343e9edb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "21"
+                  endingLineNumber = "21"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "958509CD-3075-4FBB-8467-96493D2411B8 - b617433c343e9eba"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "20"
+                  endingLineNumber = "20"
+                  offsetFromSymbolStart = "340">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "137CE1C2-06BE-4A72-A49F-13F356AFA321"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "imageFeed/ImagesList/ImagesListService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "fetchPhotosNextPage()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "137CE1C2-06BE-4A72-A49F-13F356AFA321 - 288186ab25703c72"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "100">
+               </Location>
+               <Location
+                  uuid = "137CE1C2-06BE-4A72-A49F-13F356AFA321 - 288186ab25703c17"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "100">
+               </Location>
+               <Location
+                  uuid = "137CE1C2-06BE-4A72-A49F-13F356AFA321 - 288186ab25703ff6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;imageFeed.PhotoResult, Swift.Error&gt;) -&gt; () in imageFeed.ImagesListService.fetchPhotosNextPage() -&gt; ()"
+                  moduleName = "imageFeed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruslanhalilulin/Desktop/Yandex.praktikum/imageFeed/imageFeed/ImagesList/ImagesListService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "100">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

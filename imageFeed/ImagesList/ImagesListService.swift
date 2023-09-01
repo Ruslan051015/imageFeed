@@ -1,6 +1,6 @@
 import Foundation
 
-final class ImageListService {
+final class ImagesListService {
     // MARK: - Private Properties:
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
@@ -9,16 +9,12 @@ final class ImageListService {
     private var task: URLSessionTask?
     static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
     // MARK: - Methods
-    private func fetchPhotosNextPage() {
+    func fetchPhotosNextPage() {
         guard task == nil else { return }
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
             return assertionFailure("Невозможно сформировать запрос!")}
-        object(for: request) { [weak self] result in
-            guard let self = self else {
-                assertionFailure("Класса уже нет, а мы используем его")
-                return
-            }
+        object(for: request) { result in
             switch result {
             case .success(let photoResult):
                 let photo = Photo(profileResult: photoResult)
@@ -30,20 +26,17 @@ final class ImageListService {
             }
         }
         lastLoadedPage = nextPage
-        NotificationCenter.default.post(name: ImageListService.DidChangeNotification, object: self)
+        NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
     }
     // MARK: - Private Methods:
     private func profileRequest(page: Int) -> URLRequest? {
-        var urlComponents = URLComponents(string: Constants.defaultApiBaseURLString)!
+       var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
         urlComponents.queryItems = [
-            URLQueryItem(name: "page", value: "\(page)"),
-            URLQueryItem(name: "per_page", value: "10"),
-            URLQueryItem(name: "order_by", value: "popular")]
-        let url = urlComponents.url!
-        
-        let request = builder.makeHTTPRequest(path: "/photos",
-                                              httpMethod: "GET",
-                                              baseURLString: "\(url)")
+        URLQueryItem(name: "page", value: "\(page)"),
+        URLQueryItem(name: "order_by", value: "popular")]
+        var url = urlComponents.url!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         return request
     }
     
