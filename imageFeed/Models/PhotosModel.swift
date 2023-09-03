@@ -11,7 +11,6 @@ struct PhotoResult: Decodable {
     let likes: Int
     let likedByUser: Bool
     let description: String
-    let user: ProfileResult
     let urls: UrlsResult
 }
 

@@ -6,6 +6,7 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
+    private let token = OAuth2TokenStorage.shared.token
     private var task: URLSessionTask?
     static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
     // MARK: - Methods
@@ -16,33 +17,39 @@ final class ImagesListService {
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
             return assertionFailure("Невозможно сформировать запрос!")}
-        object(for: request) { result in
+        object(for: request) {  result in
+            
             DispatchQueue.main.async {
                 switch result {
                 case .success(let photoResult):
                     photoResult.forEach { photo in
                         self.photos.append(Photo(profileResult: photo))
                     }
+                    self.lastLoadedPage = nextPage
+                    NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self, userInfo: ["Photos": self.photos])
                     
                 case .failure(let error):
                     assertionFailure("Не удалось сохранить фото в массив")
                 }
             }
         }
-        lastLoadedPage = nextPage
-        NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self, userInfo: ["Photos": self.photos])
+        
     }
     // MARK: - Private Methods:
     private func profileRequest(page: Int) -> URLRequest? {
-       var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
+        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
         urlComponents.queryItems = [
-        URLQueryItem(name: "page", value: "\(page)"),
-        URLQueryItem(name: "order_by", value: "popular")]
+            URLQueryItem(name: "page", value: "\(page)"),
+            URLQueryItem(name: "order_by", value: "popular")]
         var url = urlComponents.url!
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-      
+        
+        if let token = token {
+            request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
+        }
+        
         print(request)
         return request
     }
@@ -51,6 +58,7 @@ final class ImagesListService {
         for request: URLRequest,
         completion: @escaping (Result<[PhotoResult], Error>) -> Void) {
             let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
+                print(result)
                 completion(result)
                 self?.task = nil
             }
