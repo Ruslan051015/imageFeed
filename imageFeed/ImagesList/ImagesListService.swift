@@ -17,8 +17,11 @@ final class ImagesListService {
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
             return assertionFailure("Невозможно сформировать запрос!")}
-        object(for: request) {  result in
-            
+        object(for: request) {  [weak self] result in
+            guard let self = self else {
+                assertionFailure("Deinit before use")
+                return
+            }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let photoResult):
