@@ -19,7 +19,7 @@ final class ImagesListService {
             return assertionFailure("Невозможно сформировать запрос!")}
         object(for: request) {  [weak self] result in
             guard let self = self else {
-                assertionFailure("Deinit before use")
+                assertionFailure("Скорее всего деинит")
                 return
             }
             DispatchQueue.main.async {
@@ -29,6 +29,7 @@ final class ImagesListService {
                         self.photos.append(Photo(profileResult: photo))
                     }
                     self.lastLoadedPage = nextPage
+                    print(self.lastLoadedPage)
                     NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self, userInfo: ["Photos": self.photos])
                     
                 case .failure(let error):
@@ -52,8 +53,6 @@ final class ImagesListService {
         if let token = token {
             request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
         }
-        
-        print(request)
         return request
     }
     
@@ -61,7 +60,6 @@ final class ImagesListService {
         for request: URLRequest,
         completion: @escaping (Result<[PhotoResult], Error>) -> Void) {
             let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
-                print(result)
                 completion(result)
                 self?.task = nil
             }
