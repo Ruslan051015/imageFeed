@@ -29,7 +29,6 @@ final class ImagesListService {
                         self.photos.append(Photo(profileResult: photo))
                     }
                     self.lastLoadedPage = nextPage
-                    print(self.lastLoadedPage)
                     NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self, userInfo: ["Photos": self.photos])
                     
                 case .failure(let error):
