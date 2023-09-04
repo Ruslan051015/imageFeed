@@ -6,12 +6,11 @@ struct PhotoResult: Decodable {
     let updatedAt: String
     let width: Double
     let height: Double
-    let color: Int
+    let color: String
     let blurHash: String
     let likes: Int
     let likedByUser: Bool
-    let description: String
-    let user: ProfileResult
+    let description: String?
     let urls: UrlsResult
 }
 

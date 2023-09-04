@@ -5,52 +5,59 @@ final class ImageListService {
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
     private let urlSession = URLSession.shared
-    private let builder = URLRequestBuilder.shared
+    private let token  = OAuth2TokenStorage.shared.token
     private var task: URLSessionTask?
     static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
     // MARK: - Methods
     private func fetchPhotosNextPage() {
         guard task == nil else { return }
+        task?.cancel()
+        
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
             return assertionFailure("Невозможно сформировать запрос!")}
         object(for: request) { [weak self] result in
             guard let self = self else {
-                assertionFailure("Класса уже нет, а мы используем его")
+                assertionFailure("Скорее всего деинит")
                 return
             }
-            switch result {
-            case .success(let photoResult):
-                let photo = Photo(profileResult: photoResult)
-                DispatchQueue.main.async {
-                    self.photos.append(photo)
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let photoResult):
+                    photoResult.forEach { photo in
+                        self.photos.append(Photo(profileResult: photo))
+                    }
+                    self.lastLoadedPage = nextPage
+                    NotificationCenter.default.post(name: ImageListService.DidChangeNotification, object: self)
+                    
+                case .failure(let error):
+                    assertionFailure("Не удалось сохранить фото в массив")
                 }
-            case .failure(let error):
-                assertionFailure("Не удалось сохранить фото в массив")
             }
         }
-        lastLoadedPage = nextPage
-        NotificationCenter.default.post(name: ImageListService.DidChangeNotification, object: self)
     }
     // MARK: - Private Methods:
     private func profileRequest(page: Int) -> URLRequest? {
-        var urlComponents = URLComponents(string: Constants.defaultApiBaseURLString)!
+        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
             URLQueryItem(name: "per_page", value: "10"),
             URLQueryItem(name: "order_by", value: "popular")]
-        let url = urlComponents.url!
+        var url = urlComponents.url!
         
-        let request = builder.makeHTTPRequest(path: "/photos",
-                                              httpMethod: "GET",
-                                              baseURLString: "\(url)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        if let token = token {
+            request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
+        }
         return request
     }
     
     private func object(
         for request: URLRequest,
-        completion: @escaping (Result<PhotoResult, Error>) -> Void) {
-            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<PhotoResult, Error>) in
+        completion: @escaping (Result<[PhotoResult], Error>) -> Void) {
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
                 completion(result)
                 self?.task = nil
             }
