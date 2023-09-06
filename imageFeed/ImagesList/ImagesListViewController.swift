@@ -20,7 +20,8 @@ final class ImagesListViewController: UIViewController {
         imageListObserver = NotificationCenter.default
             .addObserver(forName: ImagesListService.DidChangeNotification,
                          object: imagesListService,
-                         queue: .main) { _ in
+                         queue: .main) { [weak self] _ in
+                guard let self = self else { return }
                 self.updateTableViewAnimated()
             }
     }
@@ -110,7 +111,8 @@ extension ImagesListViewController: UITableViewDelegate {
 extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        photos.count
+       let count = photos.count
+        return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
