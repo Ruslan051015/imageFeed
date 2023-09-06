@@ -2,14 +2,15 @@ import Foundation
 
 final class ImageListService {
     // MARK: - Private Properties:
+    static let shared = ImageListService()
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
     private let urlSession = URLSession.shared
     private let token  = OAuth2TokenStorage.shared.token
     private var task: URLSessionTask?
-    static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
+    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     // MARK: - Methods
-    private func fetchPhotosNextPage() {
+    func fetchPhotosNextPage() {
         guard task == nil else { return }
         task?.cancel()
         
@@ -28,7 +29,7 @@ final class ImageListService {
                         self.photos.append(Photo(profileResult: photo))
                     }
                     self.lastLoadedPage = nextPage
-                    NotificationCenter.default.post(name: ImageListService.DidChangeNotification, object: self)
+                    NotificationCenter.default.post(name: ImageListService.didChangeNotification, object: self)
                     
                 case .failure(let error):
                     assertionFailure("Не удалось сохранить фото в массив")
