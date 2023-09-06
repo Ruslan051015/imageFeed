@@ -1,14 +1,15 @@
 import Foundation
 
-final class ImageListService {
+final class ImagesListService {
     // MARK: - Private Properties:
-    static let shared = ImageListService()
+    static let shared = ImagesListService()
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
     private let urlSession = URLSession.shared
-    private let token  = OAuth2TokenStorage.shared.token
+    private let builder = URLRequestBuilder.shared
+    private let token = OAuth2TokenStorage.shared.token
     private var task: URLSessionTask?
-    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+    static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
     // MARK: - Methods
     func fetchPhotosNextPage() {
         guard task == nil else { return }
@@ -17,7 +18,7 @@ final class ImageListService {
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
             return assertionFailure("Невозможно сформировать запрос!")}
-        object(for: request) { [weak self] result in
+        object(for: request) {  [weak self] result in
             guard let self = self else {
                 assertionFailure("Скорее всего деинит")
                 return
@@ -29,7 +30,7 @@ final class ImageListService {
                         self.photos.append(Photo(profileResult: photo))
                     }
                     self.lastLoadedPage = nextPage
-                    NotificationCenter.default.post(name: ImageListService.didChangeNotification, object: self)
+                    NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self, userInfo: ["Photos": self.photos])
                     
                 case .failure(let error):
                     assertionFailure("Не удалось сохранить фото в массив")
@@ -42,7 +43,6 @@ final class ImageListService {
         var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
-            URLQueryItem(name: "per_page", value: "10"),
             URLQueryItem(name: "order_by", value: "popular")]
         var url = urlComponents.url!
         
@@ -66,5 +66,3 @@ final class ImageListService {
             task.resume()
         }
 }
-
-

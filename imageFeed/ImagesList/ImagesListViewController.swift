@@ -3,7 +3,7 @@ import Kingfisher
 
 final class ImagesListViewController: UIViewController {
     //MARK: - Properties:
-    private let imageListService = ImageListService.shared
+    private let imagesListService = ImagesListService.shared
     private var imageListObserver: NSObjectProtocol?
     private var photos: [Photo] = []
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
@@ -16,10 +16,10 @@ final class ImagesListViewController: UIViewController {
     //MARK: - Lifecycle:
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageListService.fetchPhotosNextPage()
+        imagesListService.fetchPhotosNextPage()
         imageListObserver = NotificationCenter.default
-            .addObserver(forName: ImageListService.didChangeNotification,
-                         object: imageListService,
+            .addObserver(forName: ImagesListService.DidChangeNotification,
+                         object: imagesListService,
                          queue: .main) { _ in
                 self.updateTableViewAnimated()
             }
@@ -44,13 +44,14 @@ final class ImagesListViewController: UIViewController {
     }
     private func updateTableViewAnimated() {
         let oldCount = photos.count
-        let newCount = imageListService.photos.count
-        photos = imageListService.photos
+        let newCount = imagesListService.photos.count
+        photos = imagesListService.photos
         if oldCount != newCount {
             tableView.performBatchUpdates {
                 let indexPath = (oldCount..<newCount).map { i in
                     IndexPath(row: i, section: 0)
                 }
+                print(indexPath)
                 tableView.insertRows(at: indexPath, with: .automatic)
             } completion: { _ in }
         }
@@ -60,7 +61,7 @@ final class ImagesListViewController: UIViewController {
 extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, photoURL: String, with indexPath: IndexPath) {
         
-        let date = imageListService.photos[indexPath.row].createdAt
+        let date = imagesListService.photos[indexPath.row].createdAt
         let placeholder = #imageLiteral(resourceName: "placeholder")
         let imageURL = URL(string: photoURL)
         
@@ -85,8 +86,8 @@ extension ImagesListViewController {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == imageListService.photos.count {
-            imageListService.fetchPhotosNextPage()
+        if indexPath.row + 1 == imagesListService.photos.count {
+            imagesListService.fetchPhotosNextPage()
         }
     }
 }
