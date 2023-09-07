@@ -25,12 +25,7 @@ final class ImagesListViewController: UIViewController {
                 self.updateTableViewAnimated()
             }
     }
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
+   
     //MARK: - Methods:
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
@@ -52,7 +47,6 @@ final class ImagesListViewController: UIViewController {
                 let indexPath = (oldCount..<newCount).map { i in
                     IndexPath(row: i, section: 0)
                 }
-                print(indexPath)
                 tableView.insertRows(at: indexPath, with: .automatic)
             } completion: { _ in }
         }
@@ -111,8 +105,7 @@ extension ImagesListViewController: UITableViewDelegate {
 extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       let count = photos.count
-        return count
+        photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
