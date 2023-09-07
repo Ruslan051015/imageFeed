@@ -22,17 +22,11 @@ struct Photo {
     let thumbImageURL: String
     let largeImageURL: String
     let isLiked: Bool
-    
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        return formatter
-    }()
-    
+
     init(profileResult: PhotoResult) {
         self.id = profileResult.id
         self.size = CGSize(width: profileResult.width, height: profileResult.height)
-        self.createdAt = dateFormatter.date(from: profileResult.createdAt)
+        self.createdAt = profileResult.createdAt.dateFromString
         self.welcomeDescription = profileResult.description
         self.thumbImageURL = profileResult.urls.thumb
         self.largeImageURL = profileResult.urls.full

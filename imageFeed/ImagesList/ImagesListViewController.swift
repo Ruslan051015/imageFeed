@@ -66,7 +66,7 @@ extension ImagesListViewController {
         let placeholder = #imageLiteral(resourceName: "placeholder")
         let imageURL = URL(string: photoURL)
         
-        cell.dateLabel.text = date?.description
+        cell.dateLabel.text = date?.stringFromDate
         cell.cellImage.kf.indicatorType = .activity
         cell.cellImage.kf.setImage(
             with: imageURL,
