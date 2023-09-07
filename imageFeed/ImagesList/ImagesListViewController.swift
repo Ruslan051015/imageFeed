@@ -48,6 +48,7 @@ final class ImagesListViewController: UIViewController {
                     IndexPath(row: i, section: 0)
                 }
                 tableView.insertRows(at: indexPath, with: .automatic)
+                print("Method was called")
             } completion: { _ in }
         }
     }
