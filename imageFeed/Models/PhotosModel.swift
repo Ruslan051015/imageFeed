@@ -22,7 +22,8 @@ struct Photo {
     let thumbImageURL: String
     let largeImageURL: String
     let isLiked: Bool
-
+}
+extension Photo {
     init(profileResult: PhotoResult) {
         self.id = profileResult.id
         self.size = CGSize(width: profileResult.width, height: profileResult.height)
