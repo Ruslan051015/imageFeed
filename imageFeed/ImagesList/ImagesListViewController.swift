@@ -32,8 +32,7 @@ final class ImagesListViewController: UIViewController {
             let viewController = segue.destination as! SingleImageViewController
             let indexPath = sender as! IndexPath
             let imageURL = URL(string: photos[indexPath.row].largeImageURL)
-            
-            viewController.image = UIImage(named: "placeholder") // Needs to be fixed
+            viewController.largeURL = imageURL
         } else {
             super.prepare(for: segue, sender: sender)
         }
