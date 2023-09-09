@@ -19,8 +19,9 @@ final class ImagesListService {
         
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
-            return assertionFailure("Невозможно сформировать запрос!")}
-        object(for: request) {  [weak self] result in
+            assertionFailure("Невозможно сформировать запрос!")
+            return }
+        object(for: request) { [weak self] result in
             guard let self = self else {
                 assertionFailure("Скорее всего деинит")
                 return
@@ -85,7 +86,7 @@ final class ImagesListService {
         var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
-            URLQueryItem(name: "order_by", value: "popular")]
+            URLQueryItem(name: "order_by", value: "latest")]
         let url = urlComponents.url!
         
         var request = URLRequest(url: url)

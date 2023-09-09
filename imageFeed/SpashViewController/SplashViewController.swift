@@ -73,7 +73,7 @@ final class SplashViewController: UIViewController {
                     }
                 }
             case .failure:
-                self?.showAlert(title: "Что-то пошло не так(", message: "Не удалось войти в профиль")
+                self?.showAlert(title: "Ошибка", message: "Не удалось войти в профиль!")
                 break
             }
             completion()
@@ -129,7 +129,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 }
             case .failure(_):
                 UIBlockingProgressHUD.dismiss()
-                self.showAlert(title: "Что-то пошло не так(", message: "Не удалось получить токен")
+                self.showAlert(title: "Ошибка", message: "Не удалось получить токен")
                 break
             }
         }
