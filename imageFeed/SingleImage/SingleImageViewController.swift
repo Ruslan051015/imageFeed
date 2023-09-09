@@ -39,7 +39,8 @@ final class SingleImageViewController: UIViewController {
                 UIBlockingProgressHUD.dismiss()
                 self.rescaleAndCenterImageInScrollView(image: imageResult.image)
             case .failure:
-                fatalError("Нет изображения")
+                UIBlockingProgressHUD.dismiss()
+                showAlert()
             }
             
         }
@@ -61,6 +62,16 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    private func showAlert() {
+        let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так\nПопробовать еще раз?", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Не надо", style: .default)
+        let action2 = UIAlertAction(title: "Повторить", style: .default) { _ in
+            self.setImageViewPicture()
+            }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
     }
 }
 // MARK: Extensions:

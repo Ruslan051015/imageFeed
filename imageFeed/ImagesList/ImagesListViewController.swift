@@ -139,6 +139,7 @@ extension ImagesListViewController: ImageListCellDelegate {
                 let alert = UIAlertController(title: "Ошибка", message: "Ну удалось установить лайк!", preferredStyle: .alert)
                 let action = UIAlertAction(title: "OK", style: .default)
                 alert.addAction(action)
+                self.present(alert, animated: true)
             }
         }
     }

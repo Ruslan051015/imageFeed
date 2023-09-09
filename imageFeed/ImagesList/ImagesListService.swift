@@ -51,7 +51,6 @@ final class ImagesListService {
             assertionFailure("Невозможно сформировать запрос!")
             return
         }
-        print(request) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
         checkLikeStatus(for: request) { [weak self] result  in
             guard let self = self else {
@@ -62,7 +61,6 @@ final class ImagesListService {
                 switch result {
                 case.success(let response):
                     let likedByUser = response.photo.likedByUser
-                    print(likedByUser) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     if let index = self.photos.firstIndex(where: { $0.id == photoID}) {
                         let photo = self.photos[index]
                         let newPhoto = Photo(id: photo.id,
@@ -73,7 +71,6 @@ final class ImagesListService {
                                              largeImageURL: photo.largeImageURL,
                                              isLiked: likedByUser)
                         self.photos[index] = newPhoto
-                        print(newPhoto.self) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }
                     completion(.success(likedByUser))
                 case .failure(let error):

@@ -83,6 +83,7 @@ final class SplashViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(alertAction)
+        self.present(alert, animated: true)
     }
     
     private func showAuthController() {
