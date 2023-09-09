@@ -34,3 +34,10 @@ extension Photo {
         self.isLiked = profileResult.likedByUser
     }
 }
+
+struct LikedPhotoResult: Decodable {
+    let photo: LikeByUserResult
+}
+struct LikeByUserResult: Decodable {
+    let likedByUser: Bool
+}

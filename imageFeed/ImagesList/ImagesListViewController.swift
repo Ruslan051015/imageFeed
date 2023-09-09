@@ -1,6 +1,10 @@
 import UIKit
 import Kingfisher
 
+protocol ImageListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
+
 final class ImagesListViewController: UIViewController {
     //MARK: - Properties:
     private let imagesListService = ImagesListService.shared
@@ -20,8 +24,7 @@ final class ImagesListViewController: UIViewController {
         imageListObserver = NotificationCenter.default
             .addObserver(forName: ImagesListService.DidChangeNotification,
                          object: imagesListService,
-                         queue: .main) { [weak self] _ in
-                guard let self = self else { return }
+                         queue: .main) {  _ in
                 self.updateTableViewAnimated()
             }
     }
@@ -40,14 +43,13 @@ final class ImagesListViewController: UIViewController {
     private func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
-        photos = imagesListService.photos
         if oldCount != newCount {
             tableView.performBatchUpdates {
+                self.photos = imagesListService.photos
                 let indexPath = (oldCount..<newCount).map { i in
                     IndexPath(row: i, section: 0)
                 }
                 tableView.insertRows(at: indexPath, with: .automatic)
-                print("Method was called")
             } completion: { _ in }
         }
     }
@@ -72,12 +74,6 @@ extension ImagesListViewController {
                     assertionFailure("Не удалось получить изображение")
                 }
             }
-        
-        if indexPath.row % 2 == 0 {
-            cell.likeButton.imageView?.image = UIImage(named: "like_pressed")
-        } else {
-            cell.likeButton.imageView?.image = UIImage(named: "like_not_pressed")
-        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -116,9 +112,35 @@ extension ImagesListViewController: UITableViewDataSource {
             print("Failed to create object of ImageListCell type")
             return UITableViewCell()
         }
+        imageListCell.delegate = self
+        
         configCell(for: imageListCell, photoURL: photos[indexPath.row].thumbImageURL, with: indexPath)
         
         return imageListCell
+    }
+}
+
+extension ImagesListViewController: ImageListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        
+        UIBlockingProgressHUD.show()
+        
+        imagesListService.changeLike(photoID: photo.id,
+                                     isLike: photo.isLiked) { result in
+            switch result {
+            case .success:
+                self.photos = self.imagesListService.photos
+                cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                UIBlockingProgressHUD.dismiss()
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                let alert = UIAlertController(title: "Ошибка", message: "Ну удалось установить лайк!", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default)
+                alert.addAction(action)
+            }
+        }
     }
 }
 

@@ -8,13 +8,14 @@ final class ImagesListService {
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
     private let token = OAuth2TokenStorage.shared.token
-    private var task: URLSessionTask?
+    private var imageListTask: URLSessionTask?
+    private var changeLikeTask: URLSessionTask?
     static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
     // MARK: - Methods
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
-        guard task == nil else { return }
-        task?.cancel()
+        guard imageListTask == nil else { return }
+        imageListTask?.cancel()
         
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = profileRequest(page: nextPage) else {
@@ -43,13 +44,15 @@ final class ImagesListService {
     
     func changeLike(photoID: String, isLike: Bool, _ completion: @escaping (Result<Bool, Error>)-> Void) {
         assert(Thread.isMainThread)
-        guard task == nil else { return }
-        task?.cancel()
+        guard changeLikeTask == nil else { return }
+        changeLikeTask?.cancel()
         
         guard let request: URLRequest = isLike ? unlikeRequest(photoID: photoID) : likeRequest(photoID: photoID) else {
             assertionFailure("Невозможно сформировать запрос!")
             return
         }
+        print(request) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
         checkLikeStatus(for: request) { [weak self] result  in
             guard let self = self else {
                 assertionFailure("Что-то пошло не так")
@@ -58,7 +61,8 @@ final class ImagesListService {
             DispatchQueue.main.async {
                 switch result {
                 case.success(let response):
-                    let likedByUser = response.likedByUser
+                    let likedByUser = response.photo.likedByUser
+                    print(likedByUser) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     if let index = self.photos.firstIndex(where: { $0.id == photoID}) {
                         let photo = self.photos[index]
                         let newPhoto = Photo(id: photo.id,
@@ -69,6 +73,7 @@ final class ImagesListService {
                                              largeImageURL: photo.largeImageURL,
                                              isLiked: likedByUser)
                         self.photos[index] = newPhoto
+                        print(newPhoto.self) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }
                     completion(.success(likedByUser))
                 case .failure(let error):
@@ -84,7 +89,7 @@ final class ImagesListService {
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
             URLQueryItem(name: "order_by", value: "popular")]
-        var url = urlComponents.url!
+        let url = urlComponents.url!
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -96,35 +101,17 @@ final class ImagesListService {
     }
     
     private func likeRequest(photoID: String) -> URLRequest? {
-        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "id", value: "\(photoID)")
-        ]
-        var url = urlComponents.url!
+        builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
+                                httpMethod: "POST",
+                                baseURLString: Constants.defaultApiBaseURLString)
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        
-        if let token = token {
-            request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
-        }
-        return request
     }
     
     private func unlikeRequest(photoID: String) -> URLRequest? {
-        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "id", value: "\(photoID)")
-        ]
-        var url = urlComponents.url!
+        builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
+                                httpMethod: "DELETE",
+                                baseURLString: Constants.defaultApiBaseURLString)
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        
-        if let token = token {
-            request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
-        }
-        return request
     }
     
     private func object(
@@ -132,20 +119,20 @@ final class ImagesListService {
         completion: @escaping (Result<[PhotoResult], Error>) -> Void) {
             let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
                 completion(result)
-                self?.task = nil
+                self?.imageListTask = nil
             }
-            self.task = task
+            self.imageListTask = task
             task.resume()
         }
     
     private func checkLikeStatus(
         for request: URLRequest,
-        completion: @escaping (Result<PhotoResult, Error>) -> Void) {
-            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<PhotoResult, Error>) in
+        completion: @escaping (Result<LikedPhotoResult, Error>) -> Void) {
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikedPhotoResult, Error>) in
                 completion(result)
-                self?.task = nil
+                self?.changeLikeTask = nil
             }
-            self.task = task
+            self.changeLikeTask = task
             task.resume()
         }
 }
