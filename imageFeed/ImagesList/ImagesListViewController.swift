@@ -58,7 +58,7 @@ final class ImagesListViewController: UIViewController {
 extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, photoURL: String, with indexPath: IndexPath) {
         
-        let date = imagesListService.photos[indexPath.row].createdAt
+        let date: Date? = imagesListService.photos[indexPath.row].createdAt
         let placeholder = #imageLiteral(resourceName: "placeholder")
         let imageURL = URL(string: photoURL)
         

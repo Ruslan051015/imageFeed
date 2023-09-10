@@ -2,7 +2,7 @@ import Foundation
 
 struct PhotoResult: Decodable {
     let id: String
-    let createdAt: String
+    let createdAt: String?
     let updatedAt: String
     let width: Double
     let height: Double
@@ -27,7 +27,7 @@ extension Photo {
     init(profileResult: PhotoResult) {
         self.id = profileResult.id
         self.size = CGSize(width: profileResult.width, height: profileResult.height)
-        self.createdAt = profileResult.createdAt.dateFromString
+        self.createdAt = profileResult.createdAt?.dateFromString
         self.welcomeDescription = profileResult.description
         self.thumbImageURL = profileResult.urls.thumb
         self.largeImageURL = profileResult.urls.full

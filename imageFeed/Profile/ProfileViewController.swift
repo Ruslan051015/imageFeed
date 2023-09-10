@@ -1,11 +1,12 @@
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     //MARK: - Properties:
+    private let token = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-    
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
         
@@ -47,21 +48,40 @@ final class ProfileViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    //MARK: - Methods:
+    //MARK: - Private Methods:
     @objc
     private func didTapLogOutButton() {
+        token.deleteToken()
+        WebViewViewController.cleanCookies()
+        cleanKfCache()
+        showSplashVC()
     }
+    
+    private func cleanKfCache() {
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+    }
+    private func showSplashVC() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        window.rootViewController = SplashViewController()
+        window.makeKeyAndVisible()
+    }
+    
     private func addToView(_ view: UIView) {
         self.view.addSubview(view)
     }
+    
     private func turnOfAutoresizing(_ view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
     }
+    
     private func updateProfileDetails() {
         profileNameLabel.text = profileService.profile?.name
         logInLabel.text = profileService.profile?.loginName
         statusLabel.text = profileService.profile?.bio
     }
+    
     private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
@@ -73,6 +93,7 @@ final class ProfileViewController: UIViewController {
             .processor(processor),
             .transition(.fade(1))])
     }
+    
     //MARK: - LifyCycle:
     override func viewDidLoad() {
         super.viewDidLoad()

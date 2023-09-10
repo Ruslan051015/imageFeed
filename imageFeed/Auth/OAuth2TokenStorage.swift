@@ -17,6 +17,10 @@ final class OAuth2TokenStorage {
             }
         }
     }
+    // MARK: - Methods:
+    func deleteToken() {
+        KeychainWrapper.standard.removeObject(forKey: Keys.bearerToken.rawValue)
+    }
     // MARK: - Keys for UserDefaults:
     private enum Keys: String, CodingKey {
         case bearerToken
