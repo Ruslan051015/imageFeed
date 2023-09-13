@@ -4,6 +4,7 @@ import UIKit
 final class ImagesListCell: UITableViewCell {
     //MARK: - Properties:
     static let reuseIdentifier = "ImagesListCell"
+    private var translucentGradient = TranslucentGradient.shared
     weak var delegate: ImageListCellDelegate?
     //MARK: - Outlets:
     @IBOutlet  weak var cellImage: UIImageView!
@@ -12,6 +13,7 @@ final class ImagesListCell: UITableViewCell {
     // MARK: - LifeCycle:
     override func prepareForReuse() {
         super.prepareForReuse()
+        translucentGradient.removeGradient()
         cellImage.kf.cancelDownloadTask()
     }
     // MARK: - Actions:

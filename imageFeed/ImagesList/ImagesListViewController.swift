@@ -9,6 +9,7 @@ final class ImagesListViewController: UIViewController {
     //MARK: - Properties:
     private let imagesListService = ImagesListService.shared
     private var imageListObserver: NSObjectProtocol?
+    private var translucentGradient = TranslucentGradient.shared
     private var photos: [Photo] = []
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map { "\($0)" }
@@ -26,6 +27,7 @@ final class ImagesListViewController: UIViewController {
                          object: imagesListService,
                          queue: .main) {  _ in
                 self.updateTableViewAnimated()
+                self.translucentGradient.removeGradient()
             }
     }
    
@@ -57,7 +59,6 @@ final class ImagesListViewController: UIViewController {
 //MARK: - Extensions:
 extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, photoURL: String, with indexPath: IndexPath) {
-        
         let date = imagesListService.photos[indexPath.row].createdAt
         let placeholder = #imageLiteral(resourceName: "placeholder")
         let imageURL = URL(string: photoURL)
@@ -70,8 +71,10 @@ extension ImagesListViewController {
                 switch result {
                 case .success:
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    self.translucentGradient.removeGradient()
                 case .failure:
                     assertionFailure("Не удалось получить изображение")
+                    cell.cellImage.image = UIImage(named: "placeholder")
                 }
             }
     }
@@ -112,6 +115,7 @@ extension ImagesListViewController: UITableViewDataSource {
             print("Failed to create object of ImageListCell type")
             return UITableViewCell()
         }
+        translucentGradient.setGradient(view: imageListCell.cellImage)
         imageListCell.delegate = self
         
         configCell(for: imageListCell, photoURL: photos[indexPath.row].thumbImageURL, with: indexPath)

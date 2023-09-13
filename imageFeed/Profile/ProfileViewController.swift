@@ -6,6 +6,7 @@ final class ProfileViewController: UIViewController {
     //MARK: - Properties:
     private let token = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
+    private let translucentGradient = TranslucentGradient.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
@@ -18,6 +19,7 @@ final class ProfileViewController: UIViewController {
         button.imageView?.image = logOutImage
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.tag = 1
         
         return button
     }()
@@ -26,6 +28,7 @@ final class ProfileViewController: UIViewController {
         nameLabel.text = "Руслан Халилулин"
         nameLabel.textColor = .ypWhite
         nameLabel.font = .systemFont(ofSize: 23, weight: .bold)
+        nameLabel.tag = 2
         
         return nameLabel
     }()
@@ -34,6 +37,7 @@ final class ProfileViewController: UIViewController {
         label.text = "@rusgunner"
         label.textColor = .ypGray
         label.font = .systemFont(ofSize: 13)
+        label.tag = 3
         
         return label
     }()
@@ -42,56 +46,12 @@ final class ProfileViewController: UIViewController {
         status.text = "Hello, World!"
         status.textColor = .ypWhite
         status.font = .systemFont(ofSize: 13)
+        status.tag = 4
         
         return status
     }()
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
-    }
-    //MARK: - Private Methods:
-    @objc
-    private func didTapLogOutButton() {
-        token.deleteToken()
-        WebViewViewController.cleanCookies()
-        cleanKfCache()
-        showSplashVC()
-    }
-    
-    private func cleanKfCache() {
-        let cache = ImageCache.default
-        cache.clearMemoryCache()
-        cache.clearDiskCache()
-    }
-    private func showSplashVC() {
-        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        window.rootViewController = SplashViewController()
-        window.makeKeyAndVisible()
-    }
-    
-    private func addToView(_ view: UIView) {
-        self.view.addSubview(view)
-    }
-    
-    private func turnOfAutoresizing(_ view: UIView) {
-        view.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    private func updateProfileDetails() {
-        profileNameLabel.text = profileService.profile?.name
-        logInLabel.text = profileService.profile?.loginName
-        statusLabel.text = profileService.profile?.bio
-    }
-    
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        profileImage.kf.indicatorType = .activity
-        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [
-            .processor(processor),
-            .transition(.fade(1))])
     }
     
     //MARK: - LifyCycle:
@@ -104,7 +64,7 @@ final class ProfileViewController: UIViewController {
                 guard let self = self else { return }
                 self.updateAvatar()
             }
-        
+        addGradientOnViews()
         updateAvatar()
         updateProfileDetails()
         
@@ -150,5 +110,75 @@ final class ProfileViewController: UIViewController {
             statusLabel.heightAnchor.constraint(equalToConstant: 18),
             statusLabel.topAnchor.constraint(equalTo: logInLabel.bottomAnchor, constant: 8)
         ])
+    }
+    
+    //MARK: - Private Methods:
+    @objc
+    private func didTapLogOutButton() {
+        token.deleteToken()
+        WebViewViewController.cleanCookies()
+        cleanKfCache()
+        showSplashVC()
+    }
+    
+    private func cleanKfCache() {
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+    }
+    private func showSplashVC() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        window.rootViewController = SplashViewController()
+        window.makeKeyAndVisible()
+    }
+    
+    private func addToView(_ view: UIView) {
+        self.view.addSubview(view)
+    }
+    
+    private func turnOfAutoresizing(_ view: UIView) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func updateProfileDetails() {
+        profileNameLabel.text = profileService.profile?.name
+        logInLabel.text = profileService.profile?.loginName
+        statusLabel.text = profileService.profile?.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url,
+                                 placeholder: UIImage(named: "profile_logo"),
+                                 options: [
+                                    .processor(processor),
+                                    .transition(.fade(1))]) { [weak self] result in
+                                        guard let self = self else {
+                                            assertionFailure("Не удалось получить фото")
+                                            return }
+                                        switch result {
+                                        case .success:
+                                            self.translucentGradient.removeGradient()
+                                        case .failure:
+                                            self.translucentGradient.removeGradient()
+                                            self.profileImage.image = UIImage(named: "profile_logo")
+                                        }
+                                        
+                                    }
+    }
+    
+    private func addGradientOnViews() {
+        DispatchQueue.main.async {
+            self.translucentGradient.setGradient(view: self.profileImage)
+            self.translucentGradient.setGradient(view: self.profileNameLabel)
+            self.translucentGradient.setGradient(view: self.logInLabel)
+            self.translucentGradient.setGradient(view: self.statusLabel)
+            self.translucentGradient.setGradient(view: self.statusLabel)
+        }
     }
 }
