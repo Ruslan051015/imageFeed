@@ -28,7 +28,7 @@ final class ImagesListViewController: UIViewController {
                 self.updateTableViewAnimated()
             }
     }
-   
+    
     //MARK: - Methods:
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
@@ -107,13 +107,11 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        
         guard let imageListCell = cell as? ImagesListCell else {
             print("Failed to create object of ImageListCell type")
             return UITableViewCell()
         }
         imageListCell.delegate = self
-        
         configCell(for: imageListCell, photoURL: photos[indexPath.row].thumbImageURL, with: indexPath)
         
         return imageListCell
@@ -127,21 +125,22 @@ extension ImagesListViewController: ImageListCellDelegate {
         
         UIBlockingProgressHUD.show()
         
-        imagesListService.changeLike(photoID: photo.id,
-                                     isLike: photo.isLiked) { result in
-            switch result {
-            case .success:
-                self.photos = self.imagesListService.photos
-                cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
-                UIBlockingProgressHUD.dismiss()
-            case .failure:
-                UIBlockingProgressHUD.dismiss()
-                let alert = UIAlertController(title: "Ошибка", message: "Ну удалось установить лайк!", preferredStyle: .alert)
-                let action = UIAlertAction(title: "OK", style: .default)
-                alert.addAction(action)
-                self.present(alert, animated: true)
+        imagesListService.changeLike(
+            photoID: photo.id,
+            isLike: photo.isLiked) { result in
+                switch result {
+                case .success:
+                    self.photos = self.imagesListService.photos
+                    cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                    UIBlockingProgressHUD.dismiss()
+                case .failure:
+                    UIBlockingProgressHUD.dismiss()
+                    let alert = UIAlertController(title: "Ошибка", message: "Ну удалось установить лайк!", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .default)
+                    alert.addAction(action)
+                    self.present(alert, animated: true)
+                }
             }
-        }
     }
 }
 

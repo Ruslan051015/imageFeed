@@ -45,7 +45,7 @@ final class OAuth2Service {
             }
         }
 }
-    // MARK: Extensions:
+// MARK: - Extensions:
 private extension OAuth2Service {
     func object(
         for request: URLRequest,
@@ -69,6 +69,5 @@ private extension OAuth2Service {
             httpMethod: "POST",
             baseURLString: Constants.baseURLString
         ) }
-  
 }
 

@@ -12,15 +12,17 @@ final class ProfileViewController: UIViewController {
         
         return imageView
     }()
+    
     private lazy var logOutButton: UIButton = {
         let logOutImage = UIImage(named: "logOut_logo")
-        let button = UIButton.systemButton(with: logOutImage!, target: self, action: #selector(didTapLogOutButton))
+        let button = UIButton.systemButton(with: logOutImage!, target: self, action: #selector(showAlert))
         button.imageView?.image = logOutImage
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
     }()
+    
     private lazy var profileNameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.text = "Руслан Халилулин"
@@ -29,6 +31,7 @@ final class ProfileViewController: UIViewController {
         
         return nameLabel
     }()
+    
     private lazy var logInLabel: UILabel = {
         let label = UILabel()
         label.text = "@rusgunner"
@@ -37,6 +40,7 @@ final class ProfileViewController: UIViewController {
         
         return label
     }()
+    
     private lazy var statusLabel: UILabel = {
         let status = UILabel()
         status.text = "Hello, World!"
@@ -45,11 +49,11 @@ final class ProfileViewController: UIViewController {
         
         return status
     }()
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     //MARK: - Private Methods:
-    @objc
     private func didTapLogOutButton() {
         token.deleteToken()
         WebViewViewController.cleanCookies()
@@ -62,6 +66,7 @@ final class ProfileViewController: UIViewController {
         cache.clearMemoryCache()
         cache.clearDiskCache()
     }
+    
     private func showSplashVC() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
         window.rootViewController = SplashViewController()
@@ -92,6 +97,20 @@ final class ProfileViewController: UIViewController {
         profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [
             .processor(processor),
             .transition(.fade(1))])
+    }
+    
+    @objc
+    private func showAlert() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Да", style: .default) { _ in
+            self.didTapLogOutButton()
+        }
+        let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
     }
     
     //MARK: - LifyCycle:

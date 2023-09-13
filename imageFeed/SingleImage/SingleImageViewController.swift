@@ -14,6 +14,7 @@ final class SingleImageViewController: UIViewController {
     @IBAction private func didTapBackButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
     @IBAction private func didTapShareButton(_ sender: Any) {
         guard let image = imageView.image else { return }
         let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
@@ -42,7 +43,6 @@ final class SingleImageViewController: UIViewController {
                 UIBlockingProgressHUD.dismiss()
                 showAlert()
             }
-            
         }
     }
     
@@ -63,6 +63,7 @@ final class SingleImageViewController: UIViewController {
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
+    
     private func showAlert() {
         let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так\nПопробовать еще раз?", preferredStyle: .alert)
         let action1 = UIAlertAction(title: "Не надо", style: .default)
@@ -74,7 +75,8 @@ final class SingleImageViewController: UIViewController {
         self.present(alert, animated: true)
     }
 }
-// MARK: Extensions:
+
+// MARK: - Extensions:
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView

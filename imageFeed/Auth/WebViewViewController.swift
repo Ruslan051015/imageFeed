@@ -14,11 +14,11 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.navigationDelegate = self
-    
+        
         guard var urlComponents = URLComponents(string: Constants.unsplashAuthorizeURLString) else {
             assertionFailure("Невозможно сформировать url!")
             return
-            }
+        }
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
@@ -33,7 +33,7 @@ final class WebViewViewController: UIViewController {
             self.updateProgress()
         }
     }
-   // MARK: - Methods:
+    // MARK: - Methods:
     static func cleanCookies() {
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
@@ -49,7 +49,7 @@ final class WebViewViewController: UIViewController {
     }
     // MARK: - Actions:
     @IBAction private func didTapBackButton(_ sender: Any) {
-delegate?.webViewControllerDidCancel(self)
+        delegate?.webViewControllerDidCancel(self)
     }
 }
 

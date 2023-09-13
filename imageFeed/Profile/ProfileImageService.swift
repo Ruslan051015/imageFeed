@@ -15,7 +15,6 @@ final class ProfileImageService {
     // MARK: - Methods:
     func fetchImageURL(username: String, _ completion: @escaping (Result<String,Error>) -> Void) {
         assert(Thread.isMainThread)
-        
         guard
             let token = storage.token,
             lastToken != token
