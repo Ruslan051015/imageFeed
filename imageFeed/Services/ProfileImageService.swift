@@ -2,16 +2,17 @@ import Foundation
 
 final class ProfileImageService {
     // MARK: - Properties:
-    static let DidChangeNotification = Notification.Name("ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
+    
+    // MARK: - Private properties:
     static let shared = ProfileImageService()
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
     private let storage = OAuth2TokenStorage.shared
-    
     private var task: URLSessionTask?
     private var lastToken: String?
-    
     private (set) var avatarURL: String?
+    
     // MARK: - Methods:
     func fetchImageURL(username: String, _ completion: @escaping (Result<String,Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -35,7 +36,7 @@ final class ProfileImageService {
                 }
                 self.avatarURL = profileImageURL
                 completion(.success(profileImageURL))
-                NotificationCenter.default.post(name: ProfileImageService.DidChangeNotification, object: self, userInfo: ["URL": avatarURL!])
+                NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": avatarURL!])
             case .failure(let error):
                 completion(.failure(error))
                 if case URLSession.NetworkError.urlSessionError = error {
@@ -45,7 +46,7 @@ final class ProfileImageService {
         }
     }
     
-    // MARK: - Private Methods:
+    // MARK: - Private methods:
     private func imageRequest(username: String, token: String) -> URLRequest? {
         builder.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET", baseURLString: Constants.defaultApiBaseURLString)
     }

@@ -5,11 +5,15 @@ import WebKit
 final class WebViewViewController: UIViewController {
     // MARK: - Properties:
     weak var delegate: WebViewViewControllerDelegate?
-    private var estimatedProgressObservation: NSKeyValueObservation?
-    // MARK: - Outlets:
+    
+    // MARK: - IBOutlets:
     @IBOutlet private weak var webView: WKWebView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet private weak var progressView: UIProgressView!
+    
+    // MARK: - Private properties:
+    private var estimatedProgressObservation: NSKeyValueObservation?
+    
     // MARK: - LifeCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +37,7 @@ final class WebViewViewController: UIViewController {
             self.updateProgress()
         }
     }
+    
     // MARK: - Methods:
     static func cleanCookies() {
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
@@ -42,17 +47,20 @@ final class WebViewViewController: UIViewController {
             }
         }
     }
-    // MARK: - Private Methods:
+    
+    // MARK: - Private methods:
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
-    // MARK: - Actions:
+    
+    // MARK: - IBActions:
     @IBAction private func didTapBackButton(_ sender: Any) {
         delegate?.webViewControllerDidCancel(self)
     }
 }
 
+// MARK: - Extensions:
 extension WebViewViewController: WKNavigationDelegate {
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if

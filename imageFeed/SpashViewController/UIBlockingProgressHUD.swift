@@ -2,7 +2,7 @@ import UIKit
 import ProgressHUD
 
 final class UIBlockingProgressHUD {
-    // MARK: - Properties:
+    // MARK: - Private properties:
     private static var window: UIWindow? {
         return UIApplication.shared.windows.first
     }
@@ -11,8 +11,8 @@ final class UIBlockingProgressHUD {
         window?.isUserInteractionEnabled = false
         ProgressHUD.show()
         ProgressHUD.animationType = .systemActivityIndicator
-        ProgressHUD.colorHUD = .ypBlack
-        ProgressHUD.colorAnimation = .lightGray
+        ProgressHUD.colorAnimation = .ypBlack
+        ProgressHUD.colorStatus = .ypBlack
     }
     static func dismiss() {
         window?.isUserInteractionEnabled = true

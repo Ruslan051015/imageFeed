@@ -27,7 +27,7 @@ extension Photo {
     init(profileResult: PhotoResult) {
         self.id = profileResult.id
         self.size = CGSize(width: profileResult.width, height: profileResult.height)
-        self.createdAt = profileResult.createdAt.dateFromString
+        self.createdAt = DateService.shared.dateFromText(profileResult.createdAt)
         self.welcomeDescription = profileResult.description
         self.thumbImageURL = profileResult.urls.thumb
         self.largeImageURL = profileResult.urls.full

@@ -7,22 +7,26 @@ protocol ImageListCellDelegate: AnyObject {
 
 final class ImagesListViewController: UIViewController {
     //MARK: - Properties:
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    //MARK: - IBOutlets:
+    @IBOutlet private var tableView: UITableView!
+    
+    // MARK: - Private properties:
     private let imagesListService = ImagesListService.shared
     private var imageListObserver: NSObjectProtocol?
     private var photos: [Photo] = []
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map { "\($0)" }
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    //MARK: - Outlets:
-    @IBOutlet private var tableView: UITableView!
+    
     //MARK: - Lifecycle:
     override func viewDidLoad() {
         super.viewDidLoad()
         imagesListService.fetchPhotosNextPage()
         imageListObserver = NotificationCenter.default
-            .addObserver(forName: ImagesListService.DidChangeNotification,
+            .addObserver(forName: ImagesListService.didChangeNotification,
                          object: imagesListService,
                          queue: .main) {  _ in
                 self.updateTableViewAnimated()
@@ -54,19 +58,22 @@ final class ImagesListViewController: UIViewController {
         }
     }
 }
+
 //MARK: - Extensions:
 extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, photoURL: String, with indexPath: IndexPath) {
+        cell.setIsLiked(isLiked: photos[indexPath.row].isLiked)
         
         let date = imagesListService.photos[indexPath.row].createdAt
         let placeholder = #imageLiteral(resourceName: "placeholder")
         let imageURL = URL(string: photoURL)
         
-        cell.dateLabel.text = date?.stringFromDate
+        cell.dateLabel.text = DateService.shared.stringFromDate(date: date)
         cell.cellImage.kf.indicatorType = .activity
         cell.cellImage.kf.setImage(
             with: imageURL,
-            placeholder: placeholder) { result in
+            placeholder: placeholder) { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .success:
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -127,7 +134,8 @@ extension ImagesListViewController: ImageListCellDelegate {
         
         imagesListService.changeLike(
             photoID: photo.id,
-            isLike: photo.isLiked) { result in
+            isLike: photo.isLiked) { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .success:
                     self.photos = self.imagesListService.photos

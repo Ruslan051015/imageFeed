@@ -1,23 +1,25 @@
 import Foundation
 
 final class ImagesListService {
-    // MARK: - Private Properties:
+    // MARK: - Properties:
     static let shared = ImagesListService()
+    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
+    
+    // MARK: - Private Properties:
     private (set) var photos: [Photo] = []
-    private var lastLoadedPage: Int?
+    private var lastLoadedPage: Int = 0
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
     private let token = OAuth2TokenStorage.shared.token
     private var imageListTask: URLSessionTask?
     private var changeLikeTask: URLSessionTask?
-    static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
+    
     // MARK: - Methods
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         guard imageListTask == nil else { return }
-        imageListTask?.cancel()
         
-        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        let nextPage = lastLoadedPage + 1
         guard let request = profileRequest(page: nextPage) else {
             assertionFailure("Невозможно сформировать запрос!")
             return }
@@ -33,7 +35,7 @@ final class ImagesListService {
                         self.photos.append(Photo(profileResult: photo))
                     }
                     self.lastLoadedPage = nextPage
-                    NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self, userInfo: ["Photos": self.photos])
+                    NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self, userInfo: ["Photos": self.photos])
                     
                 case .failure(let error):
                     print(error)
@@ -46,7 +48,6 @@ final class ImagesListService {
     func changeLike(photoID: String, isLike: Bool, _ completion: @escaping (Result<Bool, Error>)-> Void) {
         assert(Thread.isMainThread)
         guard changeLikeTask == nil else { return }
-        changeLikeTask?.cancel()
         
         guard let request: URLRequest = isLike ? unlikeRequest(photoID: photoID) : likeRequest(photoID: photoID) else {
             assertionFailure("Невозможно сформировать запрос!")
@@ -82,6 +83,8 @@ final class ImagesListService {
         }
     }
     // MARK: - Private Methods:
+    private init() { }
+    
     private func profileRequest(page: Int) -> URLRequest? {
         var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
         urlComponents.queryItems = [
@@ -119,7 +122,7 @@ final class ImagesListService {
                 completion(result)
                 self?.imageListTask = nil
             }
-            self.imageListTask = task
+            imageListTask = task
             task.resume()
         }
     
@@ -130,7 +133,7 @@ final class ImagesListService {
                 completion(result)
                 self?.changeLikeTask = nil
             }
-            self.changeLikeTask = task
+            changeLikeTask = task
             task.resume()
         }
 }

@@ -4,22 +4,12 @@ import UIKit
 final class SingleImageViewController: UIViewController {
     //MARK:  Properties:
     var largeURL: URL?
-
-    //MARK: - Outlets:
+    
+    //MARK: - IBOutlets:
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var backwardButton: UIButton!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var shareButton: UIButton!
-    //MARK: - Actions:
-    @IBAction private func didTapBackButton(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction private func didTapShareButton(_ sender: Any) {
-        guard let image = imageView.image else { return }
-        let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(share, animated: true)
-    }
     
     //MARK: - Lifecycle:
     override func viewDidLoad() {
@@ -46,7 +36,7 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
-    //MARK: - Private Methods:
+    //MARK: - Private methods:
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
@@ -65,15 +55,28 @@ final class SingleImageViewController: UIViewController {
     }
     
     private func showAlert() {
-        let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так\nПопробовать еще раз?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Ошибка!", message: "Что-то пошло не так.\nПопробовать еще раз?", preferredStyle: .alert)
         let action1 = UIAlertAction(title: "Не надо", style: .default)
-        let action2 = UIAlertAction(title: "Повторить", style: .default) { _ in
+        let action2 = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            guard let self = self else { return }
             self.setImageViewPicture()
-            }
+        }
         alert.addAction(action1)
         alert.addAction(action2)
         self.present(alert, animated: true)
     }
+    
+    //MARK: - IBActions:
+    @IBAction private func didTapBackButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction private func didTapShareButton(_ sender: Any) {
+        guard let image = imageView.image else { return }
+        let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(share, animated: true)
+    }
+    
 }
 
 // MARK: - Extensions:
