@@ -4,20 +4,21 @@ import UIKit
 final class ProfileService {
     // MARK: - Properties:
     static let shared = ProfileService()
+    
+    // MARK: - Private properties:
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
-    
     private var task: URLSessionTask?
     private var lastToken: String?
-    
     private (set) var profile: Profile?
+    
     // MARK: - Methods:
     func fetchProfile(completion: @escaping (Result<Profile,Error>) -> Void) {
         assert(Thread.isMainThread)
         task?.cancel()
         
-       guard let request = profileRequest() else {
-           return assertionFailure("Невозможно сформировать запрос!")}
+        guard let request = profileRequest() else {
+            return assertionFailure("Невозможно сформировать запрос!")}
         
         object(for: request) { [weak self] result in
             guard let self = self else { return }
@@ -34,13 +35,14 @@ final class ProfileService {
             }
         }
     }
+    
     // MARK: - Private Methods:
     private func profileRequest() -> URLRequest? {
         builder.makeHTTPRequest(path: "/me",
                                 httpMethod: "GET",
                                 baseURLString: Constants.defaultApiBaseURLString)}
     
-    func object(
+    private func object(
         for request: URLRequest,
         completion: @escaping (Result<ProfileResult, Error>) -> Void) {
             let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in

@@ -1,25 +1,35 @@
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
-    //MARK: - Properties:
+    // MARK: - Properties:
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    //MARK: - Private properties:
+    private let token = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-    
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
         
         return imageView
     }()
+    
     private lazy var logOutButton: UIButton = {
         let logOutImage = UIImage(named: "logOut_logo")
-        let button = UIButton.systemButton(with: logOutImage!, target: self, action: #selector(didTapLogOutButton))
+        let button = UIButton(type: .system)
+        button.setImage(logOutImage, for: .normal)
+        button.addTarget(self, action: #selector(showAlert), for: .touchUpInside)
         button.imageView?.image = logOutImage
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
     }()
+    
     private lazy var profileNameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.text = "Руслан Халилулин"
@@ -28,6 +38,7 @@ final class ProfileViewController: UIViewController {
         
         return nameLabel
     }()
+    
     private lazy var logInLabel: UILabel = {
         let label = UILabel()
         label.text = "@rusgunner"
@@ -36,6 +47,7 @@ final class ProfileViewController: UIViewController {
         
         return label
     }()
+    
     private lazy var statusLabel: UILabel = {
         let status = UILabel()
         status.text = "Hello, World!"
@@ -44,24 +56,41 @@ final class ProfileViewController: UIViewController {
         
         return status
     }()
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    //MARK: - Methods:
-    @objc
+    
+    //MARK: - Private methods:
     private func didTapLogOutButton() {
+        token.deleteToken()
+        WebViewViewController.cleanCookies()
+        cleanKfCache()
+        showSplashVC()
     }
+    
+    private func cleanKfCache() {
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+    }
+    
+    private func showSplashVC() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        window.rootViewController = SplashViewController()
+        window.makeKeyAndVisible()
+    }
+    
     private func addToView(_ view: UIView) {
         self.view.addSubview(view)
     }
+    
     private func turnOfAutoresizing(_ view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
     }
+    
     private func updateProfileDetails() {
         profileNameLabel.text = profileService.profile?.name
         logInLabel.text = profileService.profile?.loginName
         statusLabel.text = profileService.profile?.bio
     }
+    
     private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
@@ -73,12 +102,28 @@ final class ProfileViewController: UIViewController {
             .processor(processor),
             .transition(.fade(1))])
     }
-    //MARK: - LifyCycle:
+    
+    @objc
+    private func showAlert() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.didTapLogOutButton()
+        }
+        let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
+    }
+    
+    //MARK: - LifeCycle:
     override func viewDidLoad() {
         super.viewDidLoad()
         
         profileImageServiceObserver = NotificationCenter.default
-            .addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) {
+            .addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) {
                 [weak self] _ in
                 guard let self = self else { return }
                 self.updateAvatar()

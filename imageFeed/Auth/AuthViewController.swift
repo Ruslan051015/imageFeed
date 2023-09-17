@@ -12,16 +12,16 @@ final class AuthViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
-    private let segueIdentifier = "ShowWebView"
     weak var delegate: AuthViewControllerDelegate?
+    
+    // MARK: - Private properties:
+    private let segueIdentifier = "ShowWebView"
     private lazy var authImage: UIImageView = {
         var authImage = #imageLiteral(resourceName: "authLogo")
         let image = UIImageView(image: authImage)
         image.bounds.size = CGSize(width: 60, height: 60)
         return image
     }()
-    
     private lazy var logInButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .ypWhite
@@ -33,7 +33,29 @@ final class AuthViewController: UIViewController {
         button.layer.masksToBounds = true
         return button
     }()
-    // MARK: - Private Methods:
+    
+    // MARK: - LifeCycle:
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .ypBlack
+        turnOfAutoresizing(authImage)
+        addToView(authImage)
+        turnOfAutoresizing(logInButton)
+        addToView(logInButton)
+        
+        NSLayoutConstraint.activate([
+            authImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            authImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            logInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            logInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -124),
+            logInButton.heightAnchor.constraint(equalToConstant: 48),
+            logInButton.widthAnchor.constraint(equalToConstant: 343)
+        ])
+    }
+    
+    // MARK: - Private methods:
     private func addToView(_ view: UIView) {
         self.view.addSubview(view)
     }
@@ -59,28 +81,9 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    // MARK: - LifeCycle:
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .ypBlack
-        turnOfAutoresizing(authImage)
-        addToView(authImage)
-        turnOfAutoresizing(logInButton)
-        addToView(logInButton)
-        
-        NSLayoutConstraint.activate([
-            authImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            authImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            logInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            logInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -124),
-            logInButton.heightAnchor.constraint(equalToConstant: 48),
-            logInButton.widthAnchor.constraint(equalToConstant: 343)
-        ])
-    }
 }
 
+// MARK: - Extensions:
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewControllerDelegate(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         delegate?.authViewController(self, didAuthenticateWithCode: code)

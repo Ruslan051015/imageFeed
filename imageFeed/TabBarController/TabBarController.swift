@@ -5,6 +5,7 @@ final class TabBarController: UITabBarController {
     // MARK: - Properties:
     private let imagesListViewControllerID = "ImagesListViewController"
     private let profileViewControllerID = "ProfileViewController"
+    
     // MARK: - Methods:
     override func awakeFromNib() {
         super.awakeFromNib()

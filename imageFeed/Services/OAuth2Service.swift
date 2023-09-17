@@ -3,6 +3,11 @@ import Foundation
 final class OAuth2Service {
     // MARK: - Properties:
     static let shared = OAuth2Service()
+    var isAuthenticated: Bool {
+        storage.token != nil
+    }
+    
+    // MARK: - Private properties:
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
     private let storage = OAuth2TokenStorage.shared
@@ -16,9 +21,7 @@ final class OAuth2Service {
             OAuth2TokenStorage.shared.token = newValue
         }
     }
-    var isAuthenticated: Bool {
-        storage.token != nil
-    }
+    
     // MARK: - Methods:
     func fetchOAuthToken(
         _ code: String,
@@ -45,7 +48,8 @@ final class OAuth2Service {
             }
         }
 }
-    // MARK: Extensions:
+
+// MARK: - Extensions:
 private extension OAuth2Service {
     func object(
         for request: URLRequest,
@@ -69,6 +73,5 @@ private extension OAuth2Service {
             httpMethod: "POST",
             baseURLString: Constants.baseURLString
         ) }
-  
 }
 
