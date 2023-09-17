@@ -78,7 +78,7 @@ extension ImagesListViewController {
                 case .success:
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 case .failure:
-                    assertionFailure("Не удалось получить изображение")
+                    cell.cellImage.image = placeholder
                 }
             }
     }
