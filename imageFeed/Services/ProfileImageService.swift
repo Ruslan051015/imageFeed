@@ -12,6 +12,7 @@ final class ProfileImageService {
     private var task: URLSessionTask?
     private var lastToken: String?
     private (set) var avatarURL: String?
+    private let authParams = AuthConfiguration.standard
     
     // MARK: - Methods:
     func fetchImageURL(username: String, _ completion: @escaping (Result<String,Error>) -> Void) {
@@ -48,8 +49,9 @@ final class ProfileImageService {
     
     // MARK: - Private methods:
     private func imageRequest(username: String, token: String) -> URLRequest? {
-        builder.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET", baseURLString: Constants.defaultApiBaseURLString)
+        builder.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET", baseURL: authParams.defaultBaseURL)
     }
+    
     private func object(
         for request: URLRequest,
         completion: @escaping (Result<UserResult, Error>) -> Void) {

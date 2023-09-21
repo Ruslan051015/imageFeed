@@ -76,6 +76,10 @@ final class AuthViewController: UIViewController {
             else {
                 fatalError ("Failed to prepare for \(segueIdentifier)")
             }
+            let authHelper = AuthHelper()
+            let webViwePresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViwePresenter
+            webViwePresenter.view = webViewViewController
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)

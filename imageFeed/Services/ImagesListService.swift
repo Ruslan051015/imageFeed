@@ -13,6 +13,7 @@ final class ImagesListService {
     private let token = OAuth2TokenStorage.shared.token
     private var imageListTask: URLSessionTask?
     private var changeLikeTask: URLSessionTask?
+    private let authParams = AuthConfiguration.standard
     
     // MARK: - Methods
     func fetchPhotosNextPage() {
@@ -104,14 +105,14 @@ final class ImagesListService {
     private func likeRequest(photoID: String) -> URLRequest? {
         builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
                                 httpMethod: "POST",
-                                baseURLString: Constants.defaultApiBaseURLString)
+                                baseURL: authParams.defaultBaseURL)
         
     }
     
     private func unlikeRequest(photoID: String) -> URLRequest? {
         builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
                                 httpMethod: "DELETE",
-                                baseURLString: Constants.defaultApiBaseURLString)
+                                baseURL: authParams.defaultBaseURL)
         
     }
     

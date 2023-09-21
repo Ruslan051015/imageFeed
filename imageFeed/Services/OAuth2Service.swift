@@ -13,6 +13,7 @@ final class OAuth2Service {
     private let storage = OAuth2TokenStorage.shared
     private var task: URLSessionTask?
     private var lastCode: String?
+    private let authParams = AuthConfiguration.standard
     private (set) var authToken: String? {
         get {
             return OAuth2TokenStorage.shared.token
@@ -65,13 +66,13 @@ private extension OAuth2Service {
     func authTokenRequest(code: String) -> URLRequest? {
         builder.makeHTTPRequest(
             path: "/oauth/token"
-            + "?client_id=\(Constants.accessKey)"
-            + "&&client_secret=\(Constants.secretKey)"
-            + "&&redirect_uri=\(Constants.redirectURI)"
+            + "?client_id=\(authParams.accessKey)"
+            + "&&client_secret=\(authParams.secretKey)"
+            + "&&redirect_uri=\(authParams.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURLString: Constants.baseURLString
+            baseURL: authParams.defaultBaseURL
         ) }
 }
 

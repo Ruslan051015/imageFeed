@@ -11,6 +11,7 @@ final class ProfileService {
     private var task: URLSessionTask?
     private var lastToken: String?
     private (set) var profile: Profile?
+    private let authParams = AuthConfiguration.standard
     
     // MARK: - Methods:
     func fetchProfile(completion: @escaping (Result<Profile,Error>) -> Void) {
@@ -40,7 +41,7 @@ final class ProfileService {
     private func profileRequest() -> URLRequest? {
         builder.makeHTTPRequest(path: "/me",
                                 httpMethod: "GET",
-                                baseURLString: Constants.defaultApiBaseURLString)}
+                                baseURL: authParams.defaultBaseURL)}
     
     private func object(
         for request: URLRequest,

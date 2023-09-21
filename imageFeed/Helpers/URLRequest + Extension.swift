@@ -8,14 +8,12 @@ final class URLRequestBuilder {
     func makeHTTPRequest(
         path: String,
         httpMethod: String,
-        baseURLString: String
+        baseURL: URL
     ) -> URLRequest? {
-        guard
-            let url = URL(string: baseURLString),
-            let baseURL = URL(string: path, relativeTo: url)
+        guard let basicURL = URL(string: path, relativeTo: baseURL)
         else { return nil }
         
-        var request = URLRequest(url: baseURL)
+        var request = URLRequest(url: basicURL)
         request.httpMethod = httpMethod
         
         if let token = storage.token {
