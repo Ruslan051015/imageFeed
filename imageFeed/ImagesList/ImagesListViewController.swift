@@ -5,6 +5,10 @@ protocol ImageListCellDelegate: AnyObject {
     func imageListCellDidTapLike(_ cell: ImagesListCell)
 }
 
+public protocol ImagesListViewControllerProtocol {
+    
+}
+
 final class ImagesListViewController: UIViewController {
     //MARK: - Properties:
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -15,15 +19,18 @@ final class ImagesListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
     
     // MARK: - Private properties:
+    private var photos: [Photo] = []
     private let imagesListService = ImagesListService.shared
     private var imageListObserver: NSObjectProtocol?
-    private var photos: [Photo] = []
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map { "\($0)" }
+    private var alertPresenter: AlertPresenter?
     
     //MARK: - Lifecycle:
     override func viewDidLoad() {
         super.viewDidLoad()
+        alertPresenter = AlertPresenter(delegate: self)
+        
         imagesListService.fetchPhotosNextPage()
         imageListObserver = NotificationCenter.default
             .addObserver(forName: ImagesListService.didChangeNotification,
@@ -44,7 +51,8 @@ final class ImagesListViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    private func updateTableViewAnimated() {
+    
+    func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
         if oldCount != newCount {
@@ -59,30 +67,16 @@ final class ImagesListViewController: UIViewController {
     }
 }
 
+// MARK: - Private methods:
+func showError() {
+    let alert = AlertModel(title: "Ошибка", message: "Не удалось установить лайк!", buttonText: "OK", completion: { [weak self] in
+        guard let self = self else { return }
+        
+    })
+}
+
 //MARK: - Extensions:
 extension ImagesListViewController {
-    func configCell(for cell: ImagesListCell, photoURL: String, with indexPath: IndexPath) {
-        cell.setIsLiked(isLiked: photos[indexPath.row].isLiked)
-        
-        let date = imagesListService.photos[indexPath.row].createdAt
-        let placeholder = #imageLiteral(resourceName: "placeholder")
-        let imageURL = URL(string: photoURL)
-        
-        cell.dateLabel.text = DateService.shared.stringFromDate(date: date)
-        cell.cellImage.kf.indicatorType = .activity
-        cell.cellImage.kf.setImage(
-            with: imageURL,
-            placeholder: placeholder) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success:
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                case .failure:
-                    cell.cellImage.image = placeholder
-                }
-            }
-    }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == imagesListService.photos.count {
             imagesListService.fetchPhotosNextPage()
@@ -115,12 +109,18 @@ extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
         guard let imageListCell = cell as? ImagesListCell else {
-            print("Failed to create object of ImageListCell type")
+            print("Не удалось создать объект ImagesListCell")
             return UITableViewCell()
         }
         imageListCell.delegate = self
-        configCell(for: imageListCell, photoURL: photos[indexPath.row].thumbImageURL, with: indexPath)
+        let isCellConfigured = imageListCell.configCell(
+            with: photos[indexPath.row].thumbImageURL,
+            with: indexPath)
         
+        imageListCell.setIsLiked(isLiked: photos[indexPath.row].isLiked)
+        if isCellConfigured {
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
         return imageListCell
     }
 }
@@ -152,4 +152,10 @@ extension ImagesListViewController: ImageListCellDelegate {
     }
 }
 
-
+extension ImagesListViewController: AlertPresenterDelegate {
+    func present(view: UIAlertController, animated: Bool) {
+        view.present(view, animated: animated)
+    }
+    
+    
+}
