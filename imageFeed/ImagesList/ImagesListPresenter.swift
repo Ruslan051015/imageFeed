@@ -4,17 +4,15 @@ import UIKit
 protocol ImagesListPresenterProtocol: AnyObject {
     var view: ImagesListViewControllerProtocol? { get set }
     func animatedUpdateTableView()
-    func fetchNextPagePhotos()
     func cellHeight(
         indexPath: IndexPath,
         tableViewWidth: CGFloat) -> CGFloat
     func fetchNextPhotos(indexPath: IndexPath)
-    func photosCount() -> Int
-    func settingLike(for picture: Photo)
-    func getLargeURL(from indexPath: IndexPath) -> URL
+    func getPhoto(indexPath: IndexPath) -> Photo?
+    func getLargeURL(from indexPath: IndexPath) -> URL?
     func imagesListConfig()
-    func getThumbURL(indexPath: IndexPath) -> String
-       
+    func settingLike(for cell: ImagesListCell, indexPath: IndexPath)
+    func photosCount() -> Int
 }
 
 final class ImagesListPresenter: ImagesListPresenterProtocol {
@@ -29,14 +27,10 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
     func animatedUpdateTableView() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
-        self.photos = imagesListService.photos
+        photos = imagesListService.photos
         if oldCount != newCount {
             view?.updateTableViewAnimated(oldCount: oldCount, newCount: newCount)
         }
-    }
-    
-    func fetchNextPagePhotos() {
-        <#code#>
     }
     
     func cellHeight(
@@ -64,12 +58,27 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
         photos.count
     }
     
-    func settingLike(for picture: Photo) {
-        <#code#>
+    func settingLike(for cell: ImagesListCell, indexPath: IndexPath) {
+        let photo = photos[indexPath.row]
+        
+        imagesListService.changeLike(
+            photoID: photo.id,
+            isLike: photo.isLiked) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success:
+                    self.photos = self.imagesListService.photos
+                    cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                    UIBlockingProgressHUD.dismiss()
+                case .failure:
+                    UIBlockingProgressHUD.dismiss()
+                    view?.showLikeError()
+                }
+            }
     }
     
-    func getLargeURL(from indexPath: IndexPath) -> URL {
-        let imageURL = URL(string: photos[indexPath.row].largeImageURL)
+    func getLargeURL(from indexPath: IndexPath) -> URL? {
+        URL(string: photos[indexPath.row].largeImageURL)
     }
     
     func imagesListConfig() {
@@ -77,7 +86,7 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
         view?.addingObserver()
     }
     
-    func getThumbURL(indexPath: IndexPath) -> String {
-        photos[indexPath.row].thumbImageURL
+    func getPhoto(indexPath: IndexPath) -> Photo? {
+        imagesListService.photos[indexPath.row]
     }
 }

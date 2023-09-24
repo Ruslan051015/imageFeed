@@ -22,6 +22,7 @@ struct AuthConfiguration {
     /*static var test: AuthConfiguration {
         return AuthConfiguration(accessKey: <#T##String#>, secretKey: <#T##String#>, redirectURI: <#T##String#>, accessScope: <#T##String#>, defaultBaseURL: <#T##URL#>, authURLString: <#T##String#>)
     }*/
+    
     static var standard: AuthConfiguration {
         return AuthConfiguration(accessKey: AccessKey, secretKey: SecretKey, redirectURI: RedirectURI, accessScope: AccessScope, defaultBaseURL: DefaultBaseURL, authURLString: UnsplashAuthorizeURLString)
     }
