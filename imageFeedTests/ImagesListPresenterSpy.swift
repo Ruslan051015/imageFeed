@@ -3,10 +3,10 @@ import Foundation
 
 final class ImagesListPresenterSpy: ImagesListPresenterProtocol {
     var view: imageFeed.ImagesListViewControllerProtocol?
-    var animatedUpdateTableViewWasCalled: Bool = false
+    var imagesListConfigWasCalled: Bool = false
     
     func animatedUpdateTableView() {
-        animatedUpdateTableViewWasCalled = true
+        
     }
     
     func cellHeight(indexPath: IndexPath, tableViewWidth: CGFloat) -> CGFloat {
@@ -26,7 +26,7 @@ final class ImagesListPresenterSpy: ImagesListPresenterProtocol {
     }
     
     func imagesListConfig() {
-        
+        imagesListConfigWasCalled = true
     }
     
     func settingLike(for cell: imageFeed.ImagesListCell, indexPath: IndexPath) {

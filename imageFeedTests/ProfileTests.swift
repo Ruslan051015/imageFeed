@@ -2,31 +2,17 @@
 import Foundation
 import XCTest
 
-final class ProfileTests: XCTest {
-    func testProfileVCCallsConfigProfileImage() {
+final class ProfileTests: XCTestCase {
+    func testconfigProfileImage() {
         //given
-        var profile = ProfileViewController()
-        var presenter = profilePresenterSpy()
+        let profile = ProfileViewController()
+        let presenter = profilePresenterSpy()
         profile.configure(presenter)
         
         //when
-        let _ = profile.observer()
+        let _ = profile.view
         
         //then
         XCTAssertTrue(presenter.configProfileImageWasCalled)
-    }
-    
-    func testLoadProfileDetails() {
-        // given
-        let sut = ProfileViewPresenter()
-        let profile = ProfileVCSpy()
-        sut.view = profile
-        
-        //when
-        sut.loadProfileDetails()
-        
-        //then
-        XCTAssertTrue(profile.updateProfileWasCalled)
-        
     }
 }

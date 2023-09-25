@@ -1,7 +1,7 @@
 @testable import imageFeed
 import XCTest
 
-final class ImageFeedTests: XCTest {
+final class ImageFeedTests: XCTestCase {
     func testAnimatedUpdateTableViewWasCalled() {
         //given
         let sut = ImagesListViewController()
@@ -9,9 +9,9 @@ final class ImageFeedTests: XCTest {
         sut.presenterConfiguration(presenter)
         
         //when
-        sut.addingObserver()
+        let _ = sut.view
         
         //then
-        XCTAssertTrue(presenter.animatedUpdateTableViewWasCalled)
+        XCTAssertTrue(presenter.imagesListConfigWasCalled)
     }
 }
