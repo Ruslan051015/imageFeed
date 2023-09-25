@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-protocol ImagesListPresenterProtocol: AnyObject {
+public protocol ImagesListPresenterProtocol: AnyObject {
     var view: ImagesListViewControllerProtocol? { get set }
     func animatedUpdateTableView()
     func cellHeight(

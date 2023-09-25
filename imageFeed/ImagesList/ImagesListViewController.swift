@@ -5,7 +5,7 @@ protocol ImageListCellDelegate: AnyObject {
     func imageListCellDidTapLike(_ cell: ImagesListCell)
 }
 
-protocol ImagesListViewControllerProtocol: AnyObject {
+public protocol ImagesListViewControllerProtocol: AnyObject {
     var presenter: ImagesListPresenterProtocol? { get set }
     func updateTableViewAnimated(oldCount: Int, newCount: Int)
     func addingObserver()

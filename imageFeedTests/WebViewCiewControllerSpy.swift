@@ -18,5 +18,8 @@ final class WebViewViewControllerSpy: WebViewViewControllerProtocol {
         
     }
     
+    func addEstimatedProgressObservation() {
+        
+    }
     
 }

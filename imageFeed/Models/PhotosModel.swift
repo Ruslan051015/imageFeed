@@ -14,7 +14,7 @@ struct PhotoResult: Decodable {
     let urls: UrlsResult
 }
 
-struct Photo {
+public struct Photo {
     let id: String
     let size: CGSize
     let createdAt: Date?

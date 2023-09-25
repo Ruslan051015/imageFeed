@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-final class ImagesListCell: UITableViewCell {
+public final class ImagesListCell: UITableViewCell {
     //MARK: - Properties:
     static let reuseIdentifier = "ImagesListCell"
     weak var delegate: ImageListCellDelegate?
@@ -15,7 +15,7 @@ final class ImagesListCell: UITableViewCell {
     private let imagesListService = ImagesListService.shared
 
     // MARK: - LifeCycle:
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         cellImage.kf.cancelDownloadTask()
     }
