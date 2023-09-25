@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 
 final class AlertPresenter {
-    private weak var delegate: AlertPresenterDelegate?
+    private weak var delegate: UIViewController?
     
-    init(delegate: AlertPresenterDelegate?) {
+    init(delegate: UIViewController?) {
         self.delegate = delegate
     }
 }
@@ -20,12 +20,12 @@ extension AlertPresenter: AlertPresenterProtocol {
         }
         alert.addAction(action)
         
-        if let secondButton = model.secondButtonText {
+        if model.secondButtonText != nil {
             let secondAction = UIAlertAction(title: model.secondButtonText, style: .default) { _ in
                 model.secondCompletion()
             }
             alert.addAction(secondAction)
         }
-        delegate?.present(view: alert, animated: true)
+        delegate?.present(alert, animated: true)
     }
 }

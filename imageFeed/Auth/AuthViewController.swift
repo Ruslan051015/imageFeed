@@ -7,6 +7,10 @@ protocol WebViewViewControllerDelegate: AnyObject {
     func webViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
+protocol AuthViewControllerDelegate: AnyObject {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+}
+
 final class AuthViewController: UIViewController {
     // MARK: - Properties
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -51,7 +55,6 @@ final class AuthViewController: UIViewController {
             logInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             logInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -124),
             logInButton.heightAnchor.constraint(equalToConstant: 48),
-            logInButton.widthAnchor.constraint(equalToConstant: 343)
         ])
     }
     

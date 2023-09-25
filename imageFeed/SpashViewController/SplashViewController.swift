@@ -1,10 +1,6 @@
 import Foundation
 import UIKit
 
-protocol AuthViewControllerDelegate: AnyObject {
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
-}
-
 final class SplashViewController: UIViewController {
     // MARK: - Properties:
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -18,6 +14,7 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var wasChecked: Bool = false
+    private var alertPresenter: AlertPresenterProtocol?
     private let screenLogo: UIImageView = {
         let imageview = UIImageView()
         imageview.image = #imageLiteral(resourceName: "Vector")
@@ -32,6 +29,8 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        alertPresenter = AlertPresenter(delegate: self)
         
         turnOfAutoresizing(screenLogo)
         addToView(screenLogo)
@@ -87,7 +86,7 @@ private extension SplashViewController {
                 }
             case .failure(_):
                 UIBlockingProgressHUD.dismiss()
-                self.showAlert(title: "Ошибка", message: "Не удалось получить токен")
+                self.tokenError()
                 break
             }
         }
@@ -95,30 +94,58 @@ private extension SplashViewController {
     
     func fetchProfile(completion: @escaping () -> Void) {
         profileService.fetchProfile() { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let profile):
-                self?.switchToTabBarController()
-                self?.profileImageService.fetchImageURL(username: profile.username) { [weak self] result in
+                self.switchToTabBarController()
+                self.profileImageService.fetchImageURL(username: profile.username) { [weak self] result in
+                    guard let self = self else { return }
                     switch result {
                     case .success(let imageUrl):
                         print(imageUrl)
                     case .failure(_):
-                        self?.showAlert(title: "Что-то пошло не так", message: "Не удалость загрузить фото профиля")
+                        self.profileImageError()
                     }
                 }
             case .failure:
-                self?.showAlert(title: "Ошибка", message: "Не удалось войти в профиль!")
+                self.profileLoginError()
                 break
             }
             completion()
         }
     }
     
-    func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(alertAction)
-        self.present(alert, animated: true)
+    func profileImageError() {
+        let alert = AlertModel(
+            title: "Что-то пошло не так",
+            message: "Не удалость загрузить фото профиля",
+            buttonText: "OK") { [weak self] in
+                guard let self = self else { return }
+                self.dismiss(animated: true)
+            }
+        alertPresenter?.show(alert)
+    }
+    
+    func profileLoginError() {
+        let alert = AlertModel(
+            title: "Ошибка",
+            message: "Не удалось войти в профиль",
+            buttonText: "OK") { [weak self] in
+                guard let self = self else { return }
+                self.dismiss(animated: true)
+            }
+        alertPresenter?.show(alert)
+    }
+    
+    func tokenError() {
+        let alert = AlertModel(
+            title: "Ошибка",
+            message: "Не удалось получить токен",
+            buttonText: "OK") { [weak self] in
+                guard let self = self else { return }
+                self.dismiss(animated: true)
+            }
+        alertPresenter?.show(alert)
     }
     
     func showAuthController() {

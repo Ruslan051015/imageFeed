@@ -12,7 +12,7 @@ protocol ImagesListViewControllerProtocol: AnyObject {
     func showLikeError()
 }
 
-final class ImagesListViewController: UIViewController & ImagesListViewControllerProtocol {
+final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     //MARK: - Properties:
     weak var presenter: ImagesListPresenterProtocol?
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -34,7 +34,6 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
         alertPresenter = AlertPresenter(delegate: self)
         
         presenter?.imagesListConfig()
-        
     }
     
     //MARK: - Methods:
@@ -146,8 +145,4 @@ extension ImagesListViewController: ImageListCellDelegate {
     }
 }
 
-extension ImagesListViewController: AlertPresenterDelegate {
-    func present(view: UIAlertController, animated: Bool) {
-        view.present(view, animated: animated)
-    }
-}
+

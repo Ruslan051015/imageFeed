@@ -1,8 +1,9 @@
 import Foundation
 
 // MARK: - Unsplash api base paths:
-fileprivate let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
 fileprivate let BaseURLString = "https://unsplash.com"
+fileprivate let DefaultBaseURL = URL(string: BaseURLString)!
+fileprivate let DefaultBaseApiURL = URL(string: "https://api.unsplash.com")!
 fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 
 // MARK: - Unsplash api constants:
@@ -17,6 +18,7 @@ struct AuthConfiguration {
     let redirectURI: String
     let accessScope: String
     let defaultBaseURL: URL
+    let defaultBaseApiURL: URL
     let authURLString: String
     
     /*static var test: AuthConfiguration {
@@ -24,15 +26,16 @@ struct AuthConfiguration {
     }*/
     
     static var standard: AuthConfiguration {
-        return AuthConfiguration(accessKey: AccessKey, secretKey: SecretKey, redirectURI: RedirectURI, accessScope: AccessScope, defaultBaseURL: DefaultBaseURL, authURLString: UnsplashAuthorizeURLString)
+        return AuthConfiguration(accessKey: AccessKey, secretKey: SecretKey, redirectURI: RedirectURI, accessScope: AccessScope, defaultBaseURL: DefaultBaseURL, defaultBaseApiURL: DefaultBaseApiURL, authURLString: UnsplashAuthorizeURLString)
     }
     
-    init(accessKey: String, secretKey: String, redirectURI: String, accessScope: String, defaultBaseURL: URL, authURLString: String) {
+    init(accessKey: String, secretKey: String, redirectURI: String, accessScope: String, defaultBaseURL: URL, defaultBaseApiURL: URL, authURLString: String) {
         self.accessKey = accessKey
         self.secretKey = secretKey
         self.redirectURI = redirectURI
         self.accessScope = accessScope
         self.defaultBaseURL = defaultBaseURL
+        self.defaultBaseApiURL = defaultBaseApiURL
         self.authURLString = authURLString
     }
 }
