@@ -66,6 +66,7 @@ final class ProfileViewPresenter: ProfilePresenterProtocol {
         cleanKfCache()
         cleanCoockiesFromWV()
         deleteToken()
+        showSplashVC()
     }
     
     func addObserverToVC() {

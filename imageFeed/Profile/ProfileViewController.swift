@@ -122,10 +122,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         view.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func logOutActions() {
-        presenter?.exitProfile()
-    }
-    
     private func showAlert() {
         let alert = AlertModel(
             title: "Пока, пока!",

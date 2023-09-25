@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol WebViewPresenterProtocol {
+public protocol WebViewPresenterProtocol: AnyObject {
     var view: WebViewViewControllerProtocol? { get set }
     func viewDidLoad()
     func didUpdateProgressValue(_ newValue: Double)
@@ -9,7 +9,7 @@ public protocol WebViewPresenterProtocol {
 
 final class WebViewPresenter: WebViewPresenterProtocol {
     // MARK: - Properties:
-    var view: WebViewViewControllerProtocol?
+    weak var view: WebViewViewControllerProtocol?
     var authHelper: AuthHelperProtocol
     
     // MARK: - LifeCycle:
