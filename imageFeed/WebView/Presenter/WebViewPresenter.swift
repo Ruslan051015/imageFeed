@@ -16,6 +16,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     func viewDidLoad() {
         let request = authHelper.authRequest()
         view?.load(request: request)
+        view?.addEstimatedProgressObservation()
         didUpdateProgressValue(0)
     }
     

@@ -7,6 +7,7 @@ public protocol WebViewViewControllerProtocol: AnyObject {
     func load(request: URLRequest)
     func setProgressValue(_ newValue: Float)
     func setProgressHiden(_ isHidden: Bool)
+    func addEstimatedProgressObservation()
 }
 
 final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
@@ -40,12 +41,13 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            presenter?.didUpdateProgressValue(webView.estimatedProgress)
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
+    func addEstimatedProgressObservation() {
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             changeHandler: { [weak self] _ , _ in
+                 guard let self = self else { return }
+                 self.presenter?.didUpdateProgressValue(webView.estimatedProgress)
+             })
     }
     
     func load(request: URLRequest) {
