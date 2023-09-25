@@ -72,7 +72,7 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
                     UIBlockingProgressHUD.dismiss()
                 case .failure:
                     UIBlockingProgressHUD.dismiss()
-                    view?.showLikeError()
+                    self.view?.showLikeError()
                 }
             }
     }

@@ -43,7 +43,7 @@ final class ImagesListCell: UITableViewCell {
                 case .success:
                     isConfigured = true
                 case .failure:
-                    cellImage.image = placeholder
+                    self.cellImage.image = placeholder
                 }
             }
         return isConfigured

@@ -106,14 +106,14 @@ final class ImagesListService {
     private func likeRequest(photoID: String) -> URLRequest? {
         builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
                                 httpMethod: "POST",
-                                baseURL: authParams.defaultBaseURL)
+                                baseURL: authParams.defaultBaseApiURL)
         
     }
     
     private func unlikeRequest(photoID: String) -> URLRequest? {
         builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
                                 httpMethod: "DELETE",
-                                baseURL: authParams.defaultBaseURL)
+                                baseURL: authParams.defaultBaseApiURL)
         
     }
     

@@ -32,12 +32,12 @@ final class ProfileImageService {
             switch result {
             case .success(let profile):
                 guard  let profileImageURL = profile.profileImage.medium else {
-                    assertionFailure("Can't get image url")
+                    assertionFailure("Не удалось получить url профиля")
                     return
                 }
                 self.avatarURL = profileImageURL
                 completion(.success(profileImageURL))
-                NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": avatarURL!])
+                NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": self.avatarURL!])
             case .failure(let error):
                 completion(.failure(error))
                 if case URLSession.NetworkError.urlSessionError = error {
@@ -49,7 +49,7 @@ final class ProfileImageService {
     
     // MARK: - Private methods:
     private func imageRequest(username: String, token: String) -> URLRequest? {
-        builder.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET", baseURL: authParams.defaultBaseURL)
+        builder.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET", baseURL: authParams.defaultBaseApiURL)
     }
     
     private func object(

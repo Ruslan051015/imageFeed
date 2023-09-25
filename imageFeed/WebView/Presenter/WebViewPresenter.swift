@@ -9,7 +9,7 @@ public protocol WebViewPresenterProtocol {
 
 final class WebViewPresenter: WebViewPresenterProtocol {
     // MARK: - Properties:
-    weak var view: WebViewViewControllerProtocol?
+    var view: WebViewViewControllerProtocol?
     var authHelper: AuthHelperProtocol
     
     // MARK: - LifeCycle:

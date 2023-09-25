@@ -14,7 +14,7 @@ protocol ImagesListViewControllerProtocol: AnyObject {
 
 final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     //MARK: - Properties:
-    weak var presenter: ImagesListPresenterProtocol?
+    var presenter: ImagesListPresenterProtocol?
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -70,7 +70,7 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     func showLikeError() {
         let alert = AlertModel(title: "Ошибка", message: "Не удалось установить лайк!", buttonText: "OK", completion: { [weak self] in
             guard let self = self else { return }
-            dismiss(animated: true)
+            self.dismiss(animated: true)
         })
         alertPresenter?.show(alert)
     }

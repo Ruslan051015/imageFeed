@@ -10,7 +10,7 @@ public protocol ProfileViewControllerProtocol: AnyObject {
 }
 
 final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
-    weak var presenter: ProfilePresenterProtocol?
+    var presenter: ProfilePresenterProtocol?
     
     // MARK: - Properties:
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -23,7 +23,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
-        
+        imageView.image = UIImage(named: "placeholder")
         return imageView
     }()
     
@@ -133,11 +133,11 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             buttonText: "Да",
             completion: { [weak self] in
                 guard let self = self else { return }
-                self.logOutActions()
+                presenter?.exitProfile()
             },
             secondButtonText: "Нет") { [weak self] in
                 guard let self = self else { return }
-                dismiss(animated: true)
+                self.dismiss(animated: true)
             }
         alertPresenter?.show(alert)
     }
@@ -148,42 +148,42 @@ extension ProfileViewController {
     
     func profileScreenConfiguration() {
         view.backgroundColor = .ypBlack
-
+        
         turnOfAutoresizing(profileImage)
         addToView(profileImage)
-
+        
         turnOfAutoresizing(logOutButton)
         addToView(logOutButton)
-
+        
         turnOfAutoresizing(profileNameLabel)
         addToView(profileNameLabel)
-
+        
         turnOfAutoresizing(logInLabel)
         addToView(logInLabel)
-
+        
         turnOfAutoresizing(statusLabel)
         addToView(statusLabel)
-
+        
         NSLayoutConstraint.activate([
             profileImage.heightAnchor.constraint(equalToConstant: 70),
             profileImage.widthAnchor.constraint(equalToConstant: 70),
             profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             profileImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
-
+            
             logOutButton.heightAnchor.constraint(equalToConstant: 44),
             logOutButton.widthAnchor.constraint(equalToConstant: 44),
             logOutButton.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
             logOutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-
+            
             profileNameLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor),
             profileNameLabel.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -16),
             profileNameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
-
+            
             logInLabel.leadingAnchor.constraint(equalTo: profileNameLabel.leadingAnchor),
             logInLabel.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -16),
             logInLabel.heightAnchor.constraint(equalToConstant: 18),
             logInLabel.topAnchor.constraint(equalTo: profileNameLabel.bottomAnchor, constant: 8),
-
+            
             statusLabel.leadingAnchor.constraint(equalTo: logInLabel.leadingAnchor),
             statusLabel.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -16),
             statusLabel.heightAnchor.constraint(equalToConstant: 18),
