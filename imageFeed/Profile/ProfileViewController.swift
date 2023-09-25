@@ -141,12 +141,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             }
         alertPresenter?.show(alert)
     }
-}
 
-// MARK: - Extensions:
-extension ProfileViewController {
-    
-    func profileScreenConfiguration() {
+    private func profileScreenConfiguration() {
         view.backgroundColor = .ypBlack
         
         turnOfAutoresizing(profileImage)
