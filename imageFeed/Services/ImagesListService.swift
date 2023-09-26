@@ -7,7 +7,7 @@ final class ImagesListService {
     
     // MARK: - Private Properties:
     private (set) var photos: [Photo] = []
-    private var lastLoadedPage: Int = 0
+    private var lastLoadedPage: Int?
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
     private let token = OAuth2TokenStorage.shared.token
@@ -20,7 +20,7 @@ final class ImagesListService {
         assert(Thread.isMainThread)
         guard imageListTask == nil else { return }
         
-        let nextPage = lastLoadedPage + 1
+        let nextPage = fetchNexPageNumber()
         guard let request = profileRequest(page: nextPage) else {
             assertionFailure("Невозможно сформировать запрос!")
             return }
@@ -138,4 +138,9 @@ final class ImagesListService {
             changeLikeTask = task
             task.resume()
         }
+    
+    private func fetchNexPageNumber() -> Int {
+        guard let lastLoadedPage = lastLoadedPage else { return 1 }
+        return lastLoadedPage + 1
+    }
 }

@@ -25,14 +25,14 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     // MARK: - Private properties:
     private var imageListObserver: NSObjectProtocol?
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
-    //    private let photosName: [String] = Array(0..<20).map { "\($0)" }
     private var alertPresenter: AlertPresenter?
     
     //MARK: - Lifecycle:
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter = AlertPresenter(delegate: self)
+
         
+        alertPresenter = AlertPresenter(delegate: self)
         presenter?.imagesListConfig()
     }
     
@@ -84,8 +84,10 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
 extension ImagesListViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let presenter = presenter else { return }
-        
-        presenter.fetchNextPhotos(indexPath: indexPath)
+        if let visibleRows = tableView.indexPathsForVisibleRows,
+           indexPath == visibleRows.last {
+            presenter.fetchNextPhotos(indexPath: indexPath)
+        }
     }
 }
 extension ImagesListViewController: UITableViewDelegate {

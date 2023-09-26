@@ -14,6 +14,9 @@ final class SingleImageViewController: UIViewController {
     //MARK: - Lifecycle:
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        backwardButton.accessibilityIdentifier = "BackwardButtonOnSIVC"
+        
         setImageViewPicture()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 3

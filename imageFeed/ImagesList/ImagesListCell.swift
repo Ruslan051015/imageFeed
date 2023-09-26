@@ -17,6 +17,8 @@ public final class ImagesListCell: UITableViewCell {
     // MARK: - LifeCycle:
     public override func prepareForReuse() {
         super.prepareForReuse()
+        
+        likeButton.accessibilityIdentifier = "LikeButton"
         cellImage.kf.cancelDownloadTask()
     }
     

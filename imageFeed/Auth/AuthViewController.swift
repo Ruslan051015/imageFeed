@@ -35,6 +35,7 @@ final class AuthViewController: UIViewController {
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
+        button.accessibilityIdentifier = "Authenticate"
         return button
     }()
     

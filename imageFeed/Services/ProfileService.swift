@@ -8,7 +8,7 @@ final class ProfileService {
     // MARK: - Private properties:
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
-    private var task: URLSessionTask?
+    private var profileTask: URLSessionTask?
     private var lastToken: String?
     private (set) var profile: Profile?
     private let authParams = AuthConfiguration.standard
@@ -16,7 +16,8 @@ final class ProfileService {
     // MARK: - Methods:
     func fetchProfile(completion: @escaping (Result<Profile,Error>) -> Void) {
         assert(Thread.isMainThread)
-        task?.cancel()
+        guard profile == nil else { return }
+        profileTask?.cancel()
         
         guard let request = profileRequest() else {
             return assertionFailure("Невозможно сформировать запрос!")}
@@ -48,9 +49,9 @@ final class ProfileService {
         completion: @escaping (Result<ProfileResult, Error>) -> Void) {
             let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
                 completion(result)
-                self?.task = nil
+                self?.profileTask = nil
             }
-            self.task = task
+            self.profileTask = task
             task.resume()
         }
 }
