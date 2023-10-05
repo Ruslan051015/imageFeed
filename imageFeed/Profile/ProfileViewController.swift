@@ -2,19 +2,28 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get set }
+    func setAvatar(from url: URL)
+    func updateProfileDetails(name: String, login: String, status: String)
+    func observer()
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    var presenter: ProfilePresenterProtocol?
+    
     // MARK: - Properties:
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
     //MARK: - Private properties:
-    private let token = OAuth2TokenStorage.shared
-    private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private var alertPresenter: AlertPresenterProtocol?
+    
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
-        
+        imageView.image = UIImage(named: "placeholder")
         return imageView
     }()
     
@@ -22,10 +31,11 @@ final class ProfileViewController: UIViewController {
         let logOutImage = UIImage(named: "logOut_logo")
         let button = UIButton(type: .system)
         button.setImage(logOutImage, for: .normal)
-        button.addTarget(self, action: #selector(showAlert), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapLogOutButton), for: .touchUpInside)
         button.imageView?.image = logOutImage
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityIdentifier = "LogOutButton"
         
         return button
     }()
@@ -57,24 +67,52 @@ final class ProfileViewController: UIViewController {
         return status
     }()
     
+    //MARK: - LifeCycle:
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        profileScreenConfiguration()
+        
+        presenter?.addObserverToVC()
+        presenter?.configProfileImage()
+        presenter?.loadProfileDetails()
+        
+        alertPresenter = AlertPresenter(delegate: self)
+    }
+    
+    // MARK: - Methods:
+    func observer() {
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) {
+                [weak self] _ in
+                guard let self = self else { return }
+                self.presenter?.configProfileImage()
+            }
+    }
+    
+    func setAvatar(from url: URL) {
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [
+            .processor(processor),
+            .transition(.fade(1))])
+    }
+    
+    func updateProfileDetails(name: String, login: String, status: String) {
+        profileNameLabel.text = name
+        logInLabel.text = login
+        statusLabel.text = status
+    }
+    
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
+    
     //MARK: - Private methods:
+    @objc
     private func didTapLogOutButton() {
-        token.deleteToken()
-        WebViewViewController.cleanCookies()
-        cleanKfCache()
-        showSplashVC()
-    }
-    
-    private func cleanKfCache() {
-        let cache = ImageCache.default
-        cache.clearMemoryCache()
-        cache.clearDiskCache()
-    }
-    
-    private func showSplashVC() {
-        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        window.rootViewController = SplashViewController()
-        window.makeKeyAndVisible()
+        showAlert()
     }
     
     private func addToView(_ view: UIView) {
@@ -85,53 +123,23 @@ final class ProfileViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func updateProfileDetails() {
-        profileNameLabel.text = profileService.profile?.name
-        logInLabel.text = profileService.profile?.loginName
-        statusLabel.text = profileService.profile?.bio
-    }
-    
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        profileImage.kf.indicatorType = .activity
-        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "profile_logo"), options: [
-            .processor(processor),
-            .transition(.fade(1))])
-    }
-    
-    @objc
     private func showAlert() {
-        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
-        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            self.didTapLogOutButton()
-        }
-        let action2 = UIAlertAction(title: "Нет", style: .default) { _ in
-            alert.dismiss(animated: true)
-        }
-        alert.addAction(action1)
-        alert.addAction(action2)
-        self.present(alert, animated: true)
-    }
-    
-    //MARK: - LifeCycle:
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) {
-                [weak self] _ in
+        let alert = AlertModel(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            buttonText: "Да",
+            completion: { [weak self] in
                 guard let self = self else { return }
-                self.updateAvatar()
+                presenter?.exitProfile()
+            },
+            secondButtonText: "Нет") { [weak self] in
+                guard let self = self else { return }
+                self.dismiss(animated: true)
             }
-        
-        updateAvatar()
-        updateProfileDetails()
-        
+        alertPresenter?.show(alert)
+    }
+
+    private func profileScreenConfiguration() {
         view.backgroundColor = .ypBlack
         
         turnOfAutoresizing(profileImage)

@@ -7,6 +7,10 @@ protocol WebViewViewControllerDelegate: AnyObject {
     func webViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
+protocol AuthViewControllerDelegate: AnyObject {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+}
+
 final class AuthViewController: UIViewController {
     // MARK: - Properties
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -31,6 +35,7 @@ final class AuthViewController: UIViewController {
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
+        button.accessibilityIdentifier = "Authenticate"
         return button
     }()
     
@@ -51,7 +56,6 @@ final class AuthViewController: UIViewController {
             logInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             logInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -124),
             logInButton.heightAnchor.constraint(equalToConstant: 48),
-            logInButton.widthAnchor.constraint(equalToConstant: 343)
         ])
     }
     
@@ -76,6 +80,10 @@ final class AuthViewController: UIViewController {
             else {
                 fatalError ("Failed to prepare for \(segueIdentifier)")
             }
+            let authHelper = AuthHelper()
+            let webViwePresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViwePresenter
+            webViwePresenter.view = webViewViewController
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)

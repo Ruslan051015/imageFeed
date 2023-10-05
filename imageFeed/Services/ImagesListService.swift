@@ -7,19 +7,20 @@ final class ImagesListService {
     
     // MARK: - Private Properties:
     private (set) var photos: [Photo] = []
-    private var lastLoadedPage: Int = 0
+    private var lastLoadedPage: Int?
     private let urlSession = URLSession.shared
     private let builder = URLRequestBuilder.shared
     private let token = OAuth2TokenStorage.shared.token
     private var imageListTask: URLSessionTask?
     private var changeLikeTask: URLSessionTask?
+    private let authParams = AuthConfiguration.standard
     
     // MARK: - Methods
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         guard imageListTask == nil else { return }
         
-        let nextPage = lastLoadedPage + 1
+        let nextPage = fetchNexPageNumber()
         guard let request = profileRequest(page: nextPage) else {
             assertionFailure("Невозможно сформировать запрос!")
             return }
@@ -82,6 +83,7 @@ final class ImagesListService {
             }
         }
     }
+    
     // MARK: - Private Methods:
     private init() { }
     
@@ -104,14 +106,14 @@ final class ImagesListService {
     private func likeRequest(photoID: String) -> URLRequest? {
         builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
                                 httpMethod: "POST",
-                                baseURLString: Constants.defaultApiBaseURLString)
+                                baseURL: authParams.defaultBaseApiURL)
         
     }
     
     private func unlikeRequest(photoID: String) -> URLRequest? {
         builder.makeHTTPRequest(path: "/photos/\(photoID)/like",
                                 httpMethod: "DELETE",
-                                baseURLString: Constants.defaultApiBaseURLString)
+                                baseURL: authParams.defaultBaseApiURL)
         
     }
     
@@ -136,4 +138,9 @@ final class ImagesListService {
             changeLikeTask = task
             task.resume()
         }
+    
+    private func fetchNexPageNumber() -> Int {
+        guard let lastLoadedPage = lastLoadedPage else { return 1 }
+        return lastLoadedPage + 1
+    }
 }
